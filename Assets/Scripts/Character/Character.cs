@@ -8,6 +8,7 @@ public abstract class Character : MonoBehaviour
 
     public abstract void Move();
     public abstract void Attack();
+    public abstract void Look();
     public void Die(){
         if(!_isDead){
             _isDead = true;
