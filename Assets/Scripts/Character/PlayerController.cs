@@ -13,10 +13,16 @@ public class PlayerController : Character
     private Vector2 mouse;
     private float weaponRotateAngle = 70f;
     private float rotationTime = 0.2f;
+
+    //Animator 변수
+    private Animator animator;
+    private bool isMoving;
     
     void Awake(){
         StartCoroutine(AttackCoroutine());
+        animator = gameObject.GetComponent<Animator>();
     }
+
     void Update(){
         Move();
         Look();
@@ -27,6 +33,8 @@ public class PlayerController : Character
         float moveVertical = Input.GetAxis(VERTICAL);
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
+        if(movement != new Vector2(0, 0)) animator.SetBool("isMoving", true);
+        else animator.SetBool("isMoving", false);
         transform.position += new Vector3(movement.x, movement.y, 0) * _speed * Time.deltaTime;
     }
 
