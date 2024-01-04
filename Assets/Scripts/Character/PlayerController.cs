@@ -8,9 +8,6 @@ public class PlayerController : Character
     private const string VERTICAL = "Vertical";
 
     public GameObject RightHand;
-
-    [SerializeField]
-    private float speed = 5f;
     private float angle;
     private Vector2 target;
     private Vector2 mouse;
@@ -30,7 +27,7 @@ public class PlayerController : Character
         float moveVertical = Input.GetAxis(VERTICAL);
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
-        transform.position += new Vector3(movement.x, movement.y, 0) * speed * Time.deltaTime;
+        transform.position += new Vector3(movement.x, movement.y, 0) * _speed * Time.deltaTime;
     }
 
     public override void Look(){
