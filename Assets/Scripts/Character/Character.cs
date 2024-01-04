@@ -5,8 +5,7 @@ using UnityEngine;
 public abstract class Character : MonoBehaviour
 {
     protected bool _isDead = false;
-    [serializeField] protected bool _speed = 2f;
-
+    [SerializeField] protected float _speed = 2f;
     public abstract void Move();
     public abstract void Attack();
     public abstract void Look();
