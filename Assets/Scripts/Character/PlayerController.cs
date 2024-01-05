@@ -11,8 +11,6 @@ public class PlayerController : Character
     private float angle;
     private Vector2 target;
     private Vector2 mouse;
-    private float weaponRotateAngle = 70f;
-    private float rotationTime = 0.2f;
 
     //Animator 변수
     private Animator animator;
