@@ -13,7 +13,6 @@ public class PlayerController : Character
     private Vector2 mouse;
 
     //Animator 변수
-    private Animator animator;
     private bool isMoving;
     
     void Awake(){
@@ -45,15 +44,10 @@ public class PlayerController : Character
 
     IEnumerator AttackCoroutine(){
         while(true){
-            if(Input.GetMouseButtonDown(0)){
-                Attack();
-                yield return new WaitForSeconds(2f);
+            if(Input.GetMouseButtonDown(0) && !_isAttacking){
+                StartCoroutine(Attack());
             }
             yield return null;
         }
-    }
-
-    public override void Attack(){
-        animator.SetTrigger("attack");
     }
 }

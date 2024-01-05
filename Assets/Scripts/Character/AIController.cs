@@ -6,7 +6,6 @@ public class AIController : Character
 {
     [SerializeField] private float detectRadius = 5f;
     private Transform target;
-    private Animator animator;
     private string targetTag;
 
     private void Awake(){
@@ -22,14 +21,10 @@ public class AIController : Character
     public override void Move(){
         if(target == null){
             target = FoundTarget();
-        }
+        } 
         else{
             FollowTarget();
         }
-    }
-
-    public override void Attack(){
-        
     }
 
     public override void Look(){
