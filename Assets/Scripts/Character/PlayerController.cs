@@ -56,23 +56,6 @@ public class PlayerController : Character
     }
 
     public override void Attack(){
-        StartCoroutine(SwingWeapon());
-    }
-
-    IEnumerator SwingWeapon(){
-        Quaternion startRotation = Quaternion.Euler(new Vector3(3, 0, 0));
-        Quaternion endRotation = Quaternion.Euler(new Vector3(0, 0, weaponRotateAngle));
-
-        for(float t = 0; t < 1; t += Time.deltaTime / rotationTime)
-        {
-            RightHand.transform.localRotation = Quaternion.Lerp(startRotation, endRotation, t);
-            yield return null;
-        }
-
-        for(float t = 0; t < 1; t += Time.deltaTime / rotationTime)
-        {
-            RightHand.transform.localRotation = Quaternion.Lerp(endRotation, startRotation, t);
-            yield return null;
-        }
+        animator.SetTrigger("attack");
     }
 }
