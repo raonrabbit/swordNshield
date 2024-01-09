@@ -16,8 +16,9 @@ public class PlayerController : Character
     private bool isMoving;
     
     void Awake(){
-        StartCoroutine(AttackCoroutine());
         animator = gameObject.GetComponent<Animator>();
+        StartCoroutine(AttackCoroutine());
+        StartCoroutine(DefendCoroutine());
     }
 
     void Update(){
@@ -46,6 +47,19 @@ public class PlayerController : Character
         while(true){
             if(Input.GetMouseButtonDown(0) && !_isAttacking){
                 StartCoroutine(Attack());
+            }
+            yield return null;
+        }
+    }
+
+    IEnumerator DefendCoroutine(){
+        while(true){
+            if(Input.GetKeyDown(KeyCode.LeftShift)){
+                StartDefend();
+            }
+
+            if(Input.GetKeyUp(KeyCode.LeftShift)){
+                EndDefend();
             }
             yield return null;
         }
