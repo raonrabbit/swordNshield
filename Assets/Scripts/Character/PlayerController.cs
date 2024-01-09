@@ -31,6 +31,7 @@ public class PlayerController : Character
         float moveVertical = Input.GetAxis(VERTICAL);
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
+        movement = movement.normalized;
         if(movement != new Vector2(0, 0)) animator.SetBool("isMoving", true);
         else animator.SetBool("isMoving", false);
         transform.position += new Vector3(movement.x, movement.y, 0) * _speed * Time.deltaTime;
