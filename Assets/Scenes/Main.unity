@@ -982,6 +982,7 @@ GameObject:
   - component: {fileID: 1727637230}
   - component: {fileID: 1727637231}
   - component: {fileID: 1727637232}
+  - component: {fileID: 1727637233}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Untagged
@@ -1053,7 +1054,7 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 2
+  m_DrawMode: 1
   m_Size: {x: 0.4, y: 1.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -1094,18 +1095,30 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.64}
+  m_Offset: {x: 0, y: 0.75}
   m_SpriteTilingProperty:
     border: {x: 0.12, y: 0.39999998, z: 0.12, w: 0.14999999}
     pivot: {x: 0.5, y: 0}
     oldSize: {x: 0.4, y: 1.28}
     newSize: {x: 0.4, y: 1.5}
     adaptiveTilingThreshold: 0.5
-    drawMode: 2
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.2, y: 1.28}
+  m_Size: {x: 0.2, y: 1.5}
   m_EdgeRadius: 0
+--- !u!114 &1727637233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727637229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 379ceabbb6c40db44aa268619b673197, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1740336740
 GameObject:
   m_ObjectHideFlags: 0
