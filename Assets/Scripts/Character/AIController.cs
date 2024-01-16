@@ -7,7 +7,7 @@ public class AIController : Character
     [SerializeField] private float detectRadius = 5f;
     private Transform target;
     private string targetTag;
-    private Vector3 randomPosition;
+    private Vector3 randomDirection;
 
     private void Awake(){
         targetTag = "Character";
@@ -22,28 +22,20 @@ public class AIController : Character
 
     public IEnumerator CreateRandomPosition(){
         while(true){
-            System.Random randomX = new System.Random();
-            System.Random randomY = new System.Random();
-            randomPosition = transform.position;
-            randomPosition += new Vector3(randomX.Next(-5, 5), randomY.Next(-5, 5), transform.position.z);
-            yield return new WaitForSeconds(4f);
+            float randomAngle = Random.Range(0, 360);
+            randomDirection = new Vector3(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle), 0).normalized;
+            yield return new WaitForSeconds(Random.Range(1, 10));
         }
     }
 
     public override void Move(){
-        if(Vector2.Distance(transform.position, randomPosition) < 0.1f){
-            animator.SetBool("isMoving", false);
-        }
-        else{
-            Look(randomPosition);
-            animator.SetBool("isMoving", true);
-            Vector3 direction = (randomPosition - transform.position).normalized;
-            transform.position +=  direction * (_speed * Time.deltaTime);
-        }
+        Look(randomDirection);
+        animator.SetBool("isMoving", true);
+        transform.position +=  randomDirection * (_speed * Time.deltaTime);
     }
     
     public override void Look(Vector3 target){
-        Vector3 direction = target - transform.position;
+        Vector3 direction = target;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
