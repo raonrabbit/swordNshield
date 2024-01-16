@@ -9,8 +9,7 @@ public class PlayerController : Character
 
     public GameObject RightHand;
     private float angle;
-    private Vector2 target;
-    private Vector2 mouse;
+    private Vector2 player;
 
     //Animator 변수
     private bool isMoving;
@@ -23,7 +22,7 @@ public class PlayerController : Character
 
     void Update(){
         Move();
-        Look();
+        Look(Camera.main.ScreenToWorldPoint(Input.mousePosition));
     }
 
     public override void Move(){
@@ -37,10 +36,9 @@ public class PlayerController : Character
         transform.position += new Vector3(movement.x, movement.y, 0) * _speed * Time.deltaTime;
     }
 
-    public override void Look(){
-        target = transform.position;
-        mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        angle = Mathf.Atan2(mouse.y - target.y, mouse.x - target.x) * Mathf.Rad2Deg;
+    public override void Look(Vector3 target){
+        player = transform.position;
+        angle = Mathf.Atan2(target.y - player.y, target.x - player.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
 

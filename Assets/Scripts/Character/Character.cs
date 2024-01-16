@@ -26,7 +26,7 @@ public abstract class Character : MonoBehaviour
     protected bool _isDefending = false;
 
     public abstract void Move();
-    public abstract void Look();
+    public abstract void Look(Vector3 target);
     public int GetHp{
         get => _currentHp;
     }
