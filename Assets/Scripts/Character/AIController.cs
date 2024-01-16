@@ -7,28 +7,43 @@ public class AIController : Character
     [SerializeField] private float detectRadius = 5f;
     private Transform target;
     private string targetTag;
+    private Vector3 randomPosition;
 
     private void Awake(){
         targetTag = "Character";
         animator = gameObject.GetComponent<Animator>();
+        StartCoroutine(CreateRandomPosition());
     }
 
     private void Update(){
+        target = FoundTarget();
         Move();
-        Look();
     }
 
-    public override void Move(){
-        if(target == null){
-            target = FoundTarget();
-        } 
-        else{
-            FollowTarget();
+    public IEnumerator CreateRandomPosition(){
+        while(true){
+            System.Random randomX = new System.Random();
+            System.Random randomY = new System.Random();
+            randomPosition = transform.position;
+            randomPosition += new Vector3(randomX.Next(-5, 5), randomY.Next(-5, 5), transform.position.z);
+            yield return new WaitForSeconds(4f);
         }
     }
 
-    public override void Look(){
-        Vector2 direction = target.position - transform.position;
+    public override void Move(){
+        if(Vector2.Distance(transform.position, randomPosition) < 0.1f){
+            animator.SetBool("isMoving", false);
+        }
+        else{
+            Look(randomPosition);
+            animator.SetBool("isMoving", true);
+            Vector3 direction = (randomPosition - transform.position).normalized;
+            transform.position +=  direction * (_speed * Time.deltaTime);
+        }
+    }
+    
+    public override void Look(Vector3 target){
+        Vector3 direction = target - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
