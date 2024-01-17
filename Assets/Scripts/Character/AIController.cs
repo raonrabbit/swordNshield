@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class AIController : Character
 {
-    [SerializeField] private float detectRadius = 5f;
-    private Transform target;
+    [SerializeField] private float detectRadius = 4f;
+    [SerializeField] private Collider2D selfCollider;
+    [SerializeField] private Transform target;
     private string targetTag;
     private Vector3 randomDirection;
 
     private void Awake(){
         targetTag = "Character";
         animator = gameObject.GetComponent<Animator>();
+        selfCollider = gameObject.GetComponent<Collider2D>();
         StartCoroutine(CreateRandomPosition());
+        StartCoroutine(AttackCoroutine());
     }
 
     private void Update(){
@@ -35,9 +38,9 @@ public class AIController : Character
     }
     
     public override void Look(Vector3 target){
-        Vector3 direction = target;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        float angle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 2 * Time.deltaTime);
     }
 
     private Transform FoundTarget(){
@@ -45,7 +48,7 @@ public class AIController : Character
 
         if(cols.Length > 0){
             for(int i = 0; i < cols.Length; i++){
-                if(cols[i].CompareTag(targetTag)){
+                if(cols[i].CompareTag(targetTag) && cols[i] != selfCollider){
                     Transform obj = cols[i].gameObject.transform;
                     return obj;
                 }
@@ -57,5 +60,15 @@ public class AIController : Character
     private void FollowTarget(){
         animator.SetBool("isMoving", true);
         transform.position = Vector2.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
+    }
+
+    private IEnumerator AttackCoroutine(){
+        while(true){
+            if(target != null && Vector2.Distance(transform.position, target.position) < sword.SwordLength){
+                Look(target.position);
+                StartCoroutine(Attack());
+            }
+            yield return null;
+        }
     }
 }
