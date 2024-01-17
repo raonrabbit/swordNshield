@@ -45,16 +45,18 @@ public class AIController : Character
 
     private Transform FoundTarget(){
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, detectRadius);
+        float closestDistance = float.MaxValue;
+        Transform closestTransform = null;
 
-        if(cols.Length > 0){
-            for(int i = 0; i < cols.Length; i++){
-                if(cols[i].CompareTag(targetTag) && cols[i] != selfCollider){
-                    Transform obj = cols[i].gameObject.transform;
-                    return obj;
-                }
+        foreach(Collider2D col in cols){
+            if(col == selfCollider || !col.CompareTag(targetTag)) continue;
+            float distance = Vector2.Distance(transform.position, col.transform.position);
+            if(distance < closestDistance){
+                closestDistance = distance;
+                closestTransform = col.transform;
             }
         }
-        return null;
+        return closestTransform;
     }
 
     private void FollowTarget(){
