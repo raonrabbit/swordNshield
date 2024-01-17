@@ -36,12 +36,6 @@ public class AIController : Character
         animator.SetBool("isMoving", true);
         transform.position +=  randomDirection * (_speed * Time.deltaTime);
     }
-    
-    public override void Look(Vector3 target){
-        float angle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 2 * Time.deltaTime);
-    }
 
     private Transform FoundTarget(){
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, detectRadius);

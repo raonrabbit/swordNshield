@@ -26,7 +26,11 @@ public abstract class Character : MonoBehaviour
     protected bool _isDefending = false;
 
     public abstract void Move();
-    public abstract void Look(Vector3 target);
+    public void Look(Vector3 target){
+        float angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 2f * Time.deltaTime);
+    }
     public int GetHp{
         get => _currentHp;
     }
