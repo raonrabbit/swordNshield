@@ -42,11 +42,13 @@ public abstract class Character : MonoBehaviour
     }
 
     public IEnumerator Attack(){
-        _isAttacking = true;
-        animator.SetTrigger("attack");
-        StartCoroutine(SwordColliderControl());
-        yield return new WaitForSeconds(_attackCooldown);
-        _isAttacking = false;
+        if(!_isAttacking){
+            _isAttacking = true;
+            animator.SetTrigger("attack");
+            StartCoroutine(SwordColliderControl());
+            yield return new WaitForSeconds(_attackCooldown);
+            _isAttacking = false;
+        }
     }
 
     private IEnumerator SwordColliderControl(){

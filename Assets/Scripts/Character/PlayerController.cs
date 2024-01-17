@@ -39,12 +39,13 @@ public class PlayerController : Character
     public override void Look(Vector3 target){
         player = transform.position;
         angle = Mathf.Atan2(target.y - player.y, target.x - player.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 2f * Time.deltaTime);
     }
 
     IEnumerator AttackCoroutine(){
         while(true){
-            if(Input.GetMouseButtonDown(0) && !_isAttacking){
+            if(Input.GetMouseButtonDown(0)){
                 StartCoroutine(Attack());
             }
             yield return null;
