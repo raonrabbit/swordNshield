@@ -5,23 +5,28 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    [SerializeField]
-    private float growRate = 0.2f;
-    private PlayerController playerController;
+    [SerializeField] private float growRate = 0.2f;
+    private Character selfCharacter;
     private BoxCollider2D swordCollider;
     private SpriteRenderer swordSpriteRenderer;
+    private float swordLength;
+
+    public float SwordLength{
+        get{ return swordLength; }
+    }
 
     private void Start(){
-        playerController = transform.root.GetComponent<PlayerController>();
+        selfCharacter = transform.root.GetComponent<Character>();
         swordCollider = GetComponent<BoxCollider2D>();
         swordSpriteRenderer = GetComponent<SpriteRenderer>();
-
+        swordLength = swordSpriteRenderer.size.y;
         swordCollider.enabled = false;
     }
 
     private void Grow(){
         swordSpriteRenderer.size += new Vector2(0, growRate);
         swordCollider.size += new Vector2(0, growRate);
+        swordLength += growRate;
         swordCollider.offset = new Vector2(swordCollider.size.x, swordCollider.size.y / 2);
     }
 
@@ -34,10 +39,10 @@ public class Sword : MonoBehaviour
     }
 
     public void OnTriggerEnter2D(Collider2D other){
-        if(other.gameObject != playerController.gameObject && other.tag == "Character"){
-            Character character = other.gameObject.GetComponent<Character>();
+        if(other.gameObject != selfCharacter.gameObject && other.tag == "Character"){
+            Character enemy = other.gameObject.GetComponent<Character>();
             
-            if(character != null) character.GetDamage();
+            if(enemy != null) enemy.GetDamage();
         }
     }
 }
