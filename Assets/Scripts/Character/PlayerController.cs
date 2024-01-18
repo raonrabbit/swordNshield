@@ -47,12 +47,8 @@ public class PlayerController : Character
 
     IEnumerator DefendCoroutine(){
         while(true){
-            if(Input.GetKeyDown(KeyCode.LeftShift)){
-                StartDefend();
-            }
-
-            if(Input.GetKeyUp(KeyCode.LeftShift)){
-                EndDefend();
+            if(_canDefend && Input.GetKeyDown(KeyCode.LeftShift)){
+                StartCoroutine(Defend());
             }
             yield return null;
         }

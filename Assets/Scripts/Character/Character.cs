@@ -22,8 +22,10 @@ public abstract class Character : MonoBehaviour
 
     //방어
     protected float _maxDefendTime = 3f;
-    protected float _defendingTime;
-    protected bool _isDefending = false;
+    protected float _defendCooldown = 3f;
+    protected float _defendTime = 4f;
+    [SerializeField] protected bool _isDefending = false;
+    protected bool _canDefend = true;
 
     public int GetHp{
         get => _currentHp;
@@ -32,9 +34,11 @@ public abstract class Character : MonoBehaviour
         get => _attackTime;
     }
     public abstract void Move();
-    public void GetDamage(){
-        _currentHp -= _damage;
-        if(_currentHp <= 0) Die();
+    public void GetDamage(Character other){
+        if(!(_isDefending && FaceToOther(other))){
+            _currentHp -= _damage;
+            if(_currentHp <= 0) Die();
+        }
     }
     public void Die(){
         if(!_isDead){
@@ -59,13 +63,23 @@ public abstract class Character : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 2f * Time.deltaTime);
     }
     
-    public void StartDefend(){
+    public IEnumerator Defend(){
+        _canDefend = false;
         _isDefending = true;
         animator.SetBool("isDefending", true);
-    }
-
-    public void EndDefend(){
+        yield return new WaitForSeconds(_defendTime);
         _isDefending = false;
         animator.SetBool("isDefending", false);
+        yield return new WaitForSeconds(_defendCooldown);
+        _canDefend = true;
+    }
+    
+    public bool FaceToOther(Character other){
+        Vector2 directionToOther = (other.transform.position - transform.position).normalized;
+        Debug.Log(Vector2.Angle(transform.up, directionToOther));
+        if(Vector2.Angle(transform.up, directionToOther) < 40f){
+            return true;
+        }
+        return false;
     }
 }

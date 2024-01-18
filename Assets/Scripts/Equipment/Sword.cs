@@ -48,7 +48,7 @@ public class Sword : MonoBehaviour, IEquipment
         if(other.gameObject != selfCharacter.gameObject && other.tag == "Character"){
             Character enemy = other.gameObject.GetComponent<Character>();
             
-            if(enemy != null) enemy.GetDamage();
+            if(enemy != null) enemy.GetDamage(selfCharacter);
         }
     }
 }
