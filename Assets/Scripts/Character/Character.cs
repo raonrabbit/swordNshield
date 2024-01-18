@@ -25,15 +25,10 @@ public abstract class Character : MonoBehaviour
     protected float _defendingTime;
     protected bool _isDefending = false;
 
-    public abstract void Move();
-    public void Look(Vector3 target){
-        float angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 2f * Time.deltaTime);
-    }
     public int GetHp{
         get => _currentHp;
     }
+    public abstract void Move();
     public void GetDamage(){
         _currentHp -= _damage;
         if(_currentHp <= 0) Die();
@@ -60,7 +55,12 @@ public abstract class Character : MonoBehaviour
         yield return new WaitForSeconds(_attackTime);
         sword.DisableSwordCollider();
     }
-
+    public void Look(Vector3 target){
+        float angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 2f * Time.deltaTime);
+    }
+    
     public void StartDefend(){
         _isDefending = true;
         animator.SetBool("isDefending", true);
