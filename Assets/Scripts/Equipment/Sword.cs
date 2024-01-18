@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sword : MonoBehaviour
+public class Sword : MonoBehaviour, IEquipment
 {
     [SerializeField] private float growRate = 0.2f;
     private Character selfCharacter;
@@ -21,6 +21,12 @@ public class Sword : MonoBehaviour
         swordSpriteRenderer = GetComponent<SpriteRenderer>();
         swordLength = swordSpriteRenderer.size.y;
         swordCollider.enabled = false;
+    }
+
+    public IEnumerator Use(){
+        EnableSwordCollider();
+        yield return new WaitForSeconds(selfCharacter.AttackTime);
+        DisableSwordCollider();
     }
 
     private void Grow(){
