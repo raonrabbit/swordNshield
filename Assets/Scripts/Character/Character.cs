@@ -28,6 +28,9 @@ public abstract class Character : MonoBehaviour
     public int GetHp{
         get => _currentHp;
     }
+    public float AttackTime{
+        get => _attackTime;
+    }
     public abstract void Move();
     public void GetDamage(){
         _currentHp -= _damage;
@@ -44,17 +47,12 @@ public abstract class Character : MonoBehaviour
         if(!_isAttacking){
             _isAttacking = true;
             animator.SetTrigger("attack");
-            StartCoroutine(SwordColliderControl());
+            StartCoroutine(sword.Use());
             yield return new WaitForSeconds(_attackCooldown);
             _isAttacking = false;
         }
     }
 
-    private IEnumerator SwordColliderControl(){
-        sword.EnableSwordCollider();
-        yield return new WaitForSeconds(_attackTime);
-        sword.DisableSwordCollider();
-    }
     public void Look(Vector3 target){
         float angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
         Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
