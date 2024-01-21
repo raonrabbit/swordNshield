@@ -9,6 +9,7 @@ public class AIController : Character
     [SerializeField] private Transform target;
     private string targetTag;
     private Vector3 randomDirection;
+    int behavior;
 
     private void Awake(){
         targetTag = "Character";
@@ -16,11 +17,23 @@ public class AIController : Character
         selfCollider = gameObject.GetComponent<Collider2D>();
         StartCoroutine(CreateRandomPosition());
         StartCoroutine(AttackCoroutine());
+        StartCoroutine(ChooseRandomBehavior());
     }
 
     private void Update(){
         target = FoundTarget();
-        Move();
+
+        if(HasTarget()){
+            if(behavior == 0){
+                Move();
+            }
+            else if(behavior == 1){
+                FollowTarget();
+            }
+        }
+        else{
+            Move();
+        }
     }
 
     public IEnumerator CreateRandomPosition(){
@@ -31,8 +44,19 @@ public class AIController : Character
         }
     }
 
+    public IEnumerator ChooseRandomBehavior(){
+        while(true){
+            behavior = Random.Range(0, 2);
+            yield return new WaitForSeconds(Random.Range(5, 10));
+        }
+    }
+
+    private bool HasTarget(){
+        return(target != null);
+    }
+
     public override void Move(){
-        Look(randomDirection);
+        Look(transform.position + randomDirection);
         animator.SetBool("isMoving", true);
         transform.position +=  randomDirection * (_speed * Time.deltaTime);
     }
@@ -54,14 +78,20 @@ public class AIController : Character
     }
 
     private void FollowTarget(){
-        animator.SetBool("isMoving", true);
-        transform.position = Vector2.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
+        float currentDistance = Vector2.Distance(transform.position, target.position);
+        Look(target.position);
+        if(sword.SwordLength < currentDistance){
+            animator.SetBool("isMoving", true);
+            transform.position = Vector2.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
+        }
+        else{
+            animator.SetBool("isMoving", false);
+        }
     }
 
     private IEnumerator AttackCoroutine(){
         while(true){
             if(target != null && Vector2.Distance(transform.position, target.position) < sword.SwordLength){
-                Look(target.position);
                 StartCoroutine(Attack());
             }
             yield return null;
