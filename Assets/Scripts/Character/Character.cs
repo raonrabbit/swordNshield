@@ -76,7 +76,6 @@ public abstract class Character : MonoBehaviour
     
     public bool FaceToOther(Character other){
         Vector2 directionToOther = (other.transform.position - transform.position).normalized;
-        Debug.Log(Vector2.Angle(transform.up, directionToOther));
         if(Vector2.Angle(transform.up, directionToOther) < 40f){
             return true;
         }
