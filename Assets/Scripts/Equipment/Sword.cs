@@ -45,6 +45,7 @@ public class Sword : MonoBehaviour, IEquipment
     }
 
     public void OnTriggerEnter2D(Collider2D other){
+        if(selfCharacter == null) return;
         if(other.gameObject != selfCharacter.gameObject && other.tag == "Character"){
             Character enemy = other.gameObject.GetComponent<Character>();
             
