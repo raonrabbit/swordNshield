@@ -11,29 +11,36 @@ public class AIController : Character
     private Vector3 randomDirection;
     int behavior;
 
-    private void Awake(){
+    new void Awake(){
+        base.Awake();
         targetTag = "Character";
         animator = gameObject.GetComponent<Animator>();
         selfCollider = gameObject.GetComponent<Collider2D>();
-        StartCoroutine(CreateRandomPosition());
-        StartCoroutine(AttackCoroutine());
-        StartCoroutine(ChooseRandomBehavior());
+        if(_photonView.IsMine){
+            StartCoroutine(CreateRandomPosition());
+            StartCoroutine(AttackCoroutine());
+            StartCoroutine(ChooseRandomBehavior());
+        }
     }
 
     private void Update(){
-        target = FoundTarget();
+        if(_photonView.IsMine){
+            target = FoundTarget();
 
-        if(HasTarget()){
-            if(behavior == 0){
+            if(HasTarget()){
+                if(behavior == 0){
+                    Move();
+                }
+                else if(behavior == 1){
+                    FollowTarget();
+                }
+            }
+            else{
                 Move();
             }
-            else if(behavior == 1){
-                FollowTarget();
-            }
         }
-        else{
-            Move();
-        }
+        else if((transform.position - _currentPosition).sqrMagnitude >= 100) transform.position = _currentPosition;
+        else transform.position = Vector3.Lerp(transform.position, _currentPosition, Time.deltaTime * 10);
     }
 
     public IEnumerator CreateRandomPosition(){
