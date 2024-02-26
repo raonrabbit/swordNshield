@@ -75,11 +75,16 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     public abstract void Move();
 
     public void GetDamage(Character character){
+        if(!_photonView.IsMine) return;
         if(!(_isDefending && FaceToOther(character.transform.position))){
             _currentHp -= _damage;
-            if(_currentHp <= 0) Die();
+            if(_currentHp <= 0) {
+                _photonView.RPC("Die", RpcTarget.All);
+                Die();
+            }
         }
     }
+    [PunRPC]
     public void Die(){
         if(!_isDead){
             _isDead = true;
@@ -130,6 +135,7 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     }
 
     public void OnTriggerEnter2D(Collider2D other){
+        if(!_photonView.IsMine) return;
         Sword sword = other.gameObject.GetComponent<Sword>();
         if(sword != null){
             if(!this.Equals(sword.OwnerCharacter)) GetDamage(sword.OwnerCharacter);
