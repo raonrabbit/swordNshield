@@ -49,7 +49,7 @@ public class Sword : MonoBehaviour, IEquipment
         if(other.gameObject != selfCharacter.gameObject && other.tag == "Character"){
             Character enemy = other.gameObject.GetComponent<Character>();
             
-            if(enemy != null) enemy.GetDamage(selfCharacter);
+            if(enemy != null && enemy.photonView != null) enemy.photonView.RPC("GetDamage", Photon.Pun.RpcTarget.All, selfCharacter.transform.position);
         }
     }
 }
