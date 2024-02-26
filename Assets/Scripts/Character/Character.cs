@@ -74,9 +74,8 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     }
     public abstract void Move();
 
-    [PunRPC]
-    public void GetDamage(Vector3 attackerPosition){
-        if(!(_isDefending && FaceToOther(attackerPosition))){
+    public void GetDamage(Character character){
+        if(!(_isDefending && FaceToOther(character.transform.position))){
             _currentHp -= _damage;
             if(_currentHp <= 0) Die();
         }
@@ -102,6 +101,7 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     protected void PlayTriggerAnimation(string triggerName){
         animator.SetTrigger(triggerName);
+        StartCoroutine(sword.Use());
     }
 
     public void Look(Vector3 target){
@@ -127,5 +127,12 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
             return true;
         }
         return false;
+    }
+
+    public void OnTriggerEnter2D(Collider2D other){
+        Sword sword = other.gameObject.GetComponent<Sword>();
+        if(sword != null){
+            if(!this.Equals(sword.OwnerCharacter)) GetDamage(sword.OwnerCharacter);
+        }
     }
 }

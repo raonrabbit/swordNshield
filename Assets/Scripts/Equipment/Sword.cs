@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Sword : MonoBehaviour, IEquipment
@@ -12,7 +10,10 @@ public class Sword : MonoBehaviour, IEquipment
     private float swordLength;
 
     public float SwordLength{
-        get{ return swordLength; }
+        get => swordLength;
+    }
+    public Character OwnerCharacter{
+        get => selfCharacter;
     }
 
     private void Start(){
@@ -42,14 +43,5 @@ public class Sword : MonoBehaviour, IEquipment
 
     public void DisableSwordCollider(){
         swordCollider.enabled = false;
-    }
-
-    public void OnTriggerEnter2D(Collider2D other){
-        if(selfCharacter == null) return;
-        if(other.gameObject != selfCharacter.gameObject && other.tag == "Character"){
-            Character enemy = other.gameObject.GetComponent<Character>();
-            
-            if(enemy != null && enemy.photonView != null) enemy.photonView.RPC("GetDamage", Photon.Pun.RpcTarget.All, selfCharacter.transform.position);
-        }
     }
 }
