@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class PlayerController : Character
@@ -13,16 +14,23 @@ public class PlayerController : Character
 
     //Animator 변수
     private bool isMoving;
-    
-    void Awake(){
+
+    new void Awake(){
+        base.Awake();
         animator = gameObject.GetComponent<Animator>();
-        StartCoroutine(AttackCoroutine());
-        StartCoroutine(DefendCoroutine());
+        if(_photonView.IsMine){
+            StartCoroutine(AttackCoroutine());
+            StartCoroutine(DefendCoroutine());
+        }
     }
 
-    void Update(){
-        Move();
-        Look(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+    void FixedUpdate(){
+        if(photonView.IsMine){
+            Move();
+            Look(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        }
+        else if((transform.position - _currentPosition).sqrMagnitude >= 100) transform.position = _currentPosition;
+        else transform.position = Vector3.Lerp(transform.position, _currentPosition, Time.deltaTime * 10);
     }
 
     public override void Move(){
@@ -33,7 +41,8 @@ public class PlayerController : Character
         movement = movement.normalized;
         if(movement != new Vector2(0, 0)) animator.SetBool("isMoving", true);
         else animator.SetBool("isMoving", false);
-        transform.position += new Vector3(movement.x, movement.y, 0) * _speed * Time.deltaTime;
+        _rigidBody2D.velocity = new Vector3(movement.x, movement.y, 0) * _speed;
+        //transform.position += new Vector3(movement.x, movement.y, 0) * _speed * Time.deltaTime;
     }
 
     IEnumerator AttackCoroutine(){
