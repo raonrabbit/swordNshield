@@ -12,25 +12,31 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public GameObject lobbyPanel;
     public GameObject restartPanel;
     public CinemachineVirtualCamera virtualCamera;
+    public GameObject player;
 
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
 
     public override void OnConnectedToMaster(){
-        PhotonNetwork.LocalPlayer.NickName = nameInput.text;
         PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions{ MaxPlayers = 6 }, null);
     }
-
+/*
     public override void OnJoinedRoom(){
         lobbyPanel.SetActive(false);
         Spawn();
     }
+    */
 
+    void Awake(){
+        Connect();
+    }
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape) && PhotonNetwork.IsConnected) PhotonNetwork.Disconnect();
     }
 
     public void Spawn(){
-        GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        if(!PhotonNetwork.InRoom) return;
+        PhotonNetwork.LocalPlayer.NickName = nameInput.text;
+        player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
         lobbyPanel.SetActive(false);
         virtualCamera.Follow = player.transform;
     }
