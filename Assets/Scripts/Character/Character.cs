@@ -69,6 +69,9 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     public Text GetNickName{
         get => _nickName;
     }
+    public bool GetPhotonIsMine{
+        get => _photonView.IsMine;
+    }
     public abstract void Move();
 
     [PunRPC]
@@ -89,10 +92,16 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
         if(!_isAttacking){
             _isAttacking = true;
             animator.SetTrigger("attack");
+            _photonView.RPC("PlayTriggerAnimation", RpcTarget.All, "attack");
             StartCoroutine(sword.Use());
             yield return new WaitForSeconds(_attackCooldown);
             _isAttacking = false;
         }
+    }
+
+    [PunRPC]
+    protected void PlayTriggerAnimation(string triggerName){
+        animator.SetTrigger(triggerName);
     }
 
     public void Look(Vector3 target){
