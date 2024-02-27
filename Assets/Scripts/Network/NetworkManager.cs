@@ -13,6 +13,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public GameObject restartPanel;
     public CinemachineVirtualCamera virtualCamera;
     public GameObject player;
+    public GameObject loadingUI;
 
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
 
@@ -30,15 +31,28 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Connect();
     }
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape) && PhotonNetwork.IsConnected) PhotonNetwork.Disconnect();
+        if (Input.GetKeyDown(KeyCode.Escape)) PhotonNetwork.Disconnect();
     }
 
     public void Spawn(){
-        if(!PhotonNetwork.InRoom) return;
+        loadingUI.SetActive(true);
+        if(!PhotonNetwork.IsConnected) Connect();
+        StartCoroutine(JoinRoom());
+    }
+
+    IEnumerator JoinRoom(){
+        while(!PhotonNetwork.InRoom){
+            yield return null;
+        }
         PhotonNetwork.LocalPlayer.NickName = nameInput.text;
         player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        loadingUI.SetActive(false);
         lobbyPanel.SetActive(false);
         virtualCamera.Follow = player.transform;
+    }
+
+    public void ExitToLobby(){
+        lobbyPanel.SetActive(true);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
