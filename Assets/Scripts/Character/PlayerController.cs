@@ -29,8 +29,11 @@ public class PlayerController : Character
             Move();
             Look(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         }
-        else if((transform.position - _currentPosition).sqrMagnitude >= 100) transform.position = _currentPosition;
-        else transform.position = Vector3.Lerp(transform.position, _currentPosition, Time.deltaTime * 10);
+        else{
+            if((transform.position - _currentPosition).sqrMagnitude >= 2) transform.position = _currentPosition;
+            else transform.position = Vector3.Lerp(transform.position, _currentPosition, Time.deltaTime * 10);
+            transform.rotation = Quaternion.Lerp(transform.rotation, _currentRotation, Time.deltaTime * 10);
+        }
     }
 
     public override void Move(){
