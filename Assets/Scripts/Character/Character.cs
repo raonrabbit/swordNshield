@@ -85,10 +85,11 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
     [PunRPC]
-    public void Die(){
+    public virtual void Die(){
         if(!_isDead){
             _isDead = true;
             gameObject.SetActive(false);
+            if(_photonView.IsMine) PhotonNetwork.Destroy(gameObject);
         }
     }
 

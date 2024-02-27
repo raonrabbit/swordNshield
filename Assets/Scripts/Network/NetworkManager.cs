@@ -29,6 +29,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void Awake(){
         Connect();
+        PlayerController.OnDeath += ExitToLobby;
     }
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) PhotonNetwork.Disconnect();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
@@ -15,6 +16,7 @@ public class PlayerController : Character
     //Animator 변수
     private bool isMoving;
 
+    public static event Action OnDeath;
     new void Awake(){
         base.Awake();
         animator = gameObject.GetComponent<Animator>();
@@ -34,6 +36,12 @@ public class PlayerController : Character
             else transform.position = Vector3.Lerp(transform.position, _currentPosition, Time.deltaTime * 10);
             transform.rotation = Quaternion.Lerp(transform.rotation, _currentRotation, Time.deltaTime * 10);
         }
+    }
+    [PunRPC]
+    public override void Die()
+    {
+        if(photonView.IsMine) OnDeath?.Invoke();
+        base.Die();
     }
 
     public override void Move(){
