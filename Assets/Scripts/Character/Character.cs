@@ -11,7 +11,7 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
 {
     public Sword sword;
     protected Animator animator;
-    protected PhotonView _photonView;
+    public PhotonView _photonView;
     protected Rigidbody2D _rigidBody2D;
     protected bool _isDead = false;
     [SerializeField] protected Text _nickName;
@@ -33,6 +33,13 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     protected float _defendTime = 4f;
     [SerializeField] protected bool _isDefending = false;
     protected bool _canDefend = true;
+
+    //대쉬
+    protected float _dashTime = 0.5f;
+    protected float _dashCooldown = 3f;
+    protected float _dashSpeed = 10f;
+    protected bool _isDashing = false;
+    protected bool _canDash = true;
 
     //동기화
     protected Vector3 _currentPosition;
@@ -63,14 +70,31 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     public int GetHp{
         get => _currentHp;
     }
-    public float AttackTime{
-        get => _attackTime;
-    }
     public Text GetNickName{
         get => _nickName;
     }
     public bool GetPhotonIsMine{
         get => _photonView.IsMine;
+    }
+
+    //스킬 쿨타임
+    public float DashTime{
+        get => _dashTime;
+    }
+    public float DashCoolTime{
+        get => _dashCooldown;
+    }
+    public float DefendTime{
+        get => _defendTime;
+    }
+    public float DefendCoolTime{
+        get => _defendCooldown;
+    }
+    public float AttackTime{
+        get => _attackTime;
+    }
+    public float AttackCooldown{
+        get => _attackCooldown;
     }
     public abstract void Move();
 
@@ -94,14 +118,12 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     }
 
     public IEnumerator Attack(){
-        if(!_isAttacking){
-            _isAttacking = true;
-            animator.SetTrigger("attack");
-            _photonView.RPC("PlayTriggerAnimation", RpcTarget.All, "attack");
-            StartCoroutine(sword.Use());
-            yield return new WaitForSeconds(_attackCooldown);
-            _isAttacking = false;
-        }
+        _isAttacking = true;
+        animator.SetTrigger("attack");
+        _photonView.RPC("PlayTriggerAnimation", RpcTarget.All, "attack");
+        StartCoroutine(sword.Use());
+        yield return new WaitForSeconds(_attackCooldown);
+        _isAttacking = false;
     }
 
     [PunRPC]
@@ -133,6 +155,25 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
             return true;
         }
         return false;
+    }
+
+    [PunRPC]
+    public void Dash(Vector2 direction){
+        StartCoroutine(DashCoroutine(direction));
+    }
+
+    public IEnumerator DashCoroutine(Vector2 direction){
+        float startTime = Time.time;
+        _canDash = false;
+        _isDashing = true;
+        while(Time.time - startTime < _dashTime){
+            _rigidBody2D.velocity = direction * _dashSpeed;
+            yield return null;
+        }
+        _rigidBody2D.velocity = Vector2.zero;
+        _isDashing = false;
+        yield return new WaitForSeconds(_dashCooldown);
+        _canDash = true;
     }
 
     public void OnTriggerEnter2D(Collider2D other){
