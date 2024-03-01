@@ -836,6 +836,7 @@ GameObject:
   - component: {fileID: 180451577414654660}
   - component: {fileID: 2538097515341314052}
   - component: {fileID: 3246343490521057515}
+  - component: {fileID: 6990153836038769657}
   - component: {fileID: -1362904944455060246}
   - component: {fileID: -6560287550253834781}
   - component: {fileID: 8978555419040425974}
@@ -930,6 +931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sword: {fileID: 3152055006837332726}
+  _photonView: {fileID: 0}
   _nickName: {fileID: 3016203194852809501}
   _speed: 2
   _currentHp: 100
@@ -1036,6 +1038,22 @@ MonoBehaviour:
   nickName: {fileID: 3016203194852809501}
   character: {fileID: 8167163907238410565}
   offset: {x: 0, y: -0.8, z: 0}
+--- !u!114 &6990153836038769657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7927529995917726068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdf4f9beb35c001448e6bd0c91df0a78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 8167163907238410565}
+  DashSkillImage: {fileID: 0}
+  ShieldSkillImage: {fileID: 0}
+  AttackSkillImage: {fileID: 0}
 --- !u!114 &-1362904944455060246
 MonoBehaviour:
   m_ObjectHideFlags: 0
