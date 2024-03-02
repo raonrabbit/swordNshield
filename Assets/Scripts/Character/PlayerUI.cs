@@ -22,7 +22,11 @@ public class PlayerUI : MonoBehaviour
         }
     }
 
-
+    private void OnDestroy(){
+        PlayerController.OnDash -= OnDash;
+        PlayerController.OnShield -= OnShield;
+        PlayerController.OnAttack -= OnAttack;
+    }
 
     private void OnDash(){ StartCoroutine(CoolDownImage(DashSkillImage, Actions["Dash"].ActionTime, Actions["Dash"].CoolDownTime)); }
     private void OnShield(){ StartCoroutine(CoolDownImage(ShieldSkillImage, Actions["Defend"].ActionTime, Actions["Defend"].CoolDownTime)); }
