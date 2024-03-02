@@ -15,41 +15,29 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     protected Rigidbody2D _rigidBody2D;
     protected bool _isDead = false;
     [SerializeField] protected Text _nickName;
-
+    protected Dictionary<string, IAction> _actions;
     //기본 설정
     [SerializeField] protected float _speed = 2f;
     protected int _maxHp = 100;
     [SerializeField] protected int _currentHp = 100;
     protected int _damage = 40;
 
-    //공격
-    protected float _attackCooldown = 2f;
-    protected float _attackTime = 0.2f;
-    protected bool _isAttacking = false;
-
-    //방어
-    protected float _maxDefendTime = 3f;
-    protected float _defendCooldown = 3f;
-    protected float _defendTime = 4f;
-    [SerializeField] protected bool _isDefending = false;
-    protected bool _canDefend = true;
-
-    //대쉬
-    protected float _dashTime = 0.5f;
-    protected float _dashCooldown = 3f;
-    protected float _dashSpeed = 10f;
-    protected bool _isDashing = false;
-    protected bool _canDash = true;
+    //Dash Direction
+    public Vector2 dashDirection;
 
     //동기화
     protected Vector3 _currentPosition;
     protected Quaternion _currentRotation;
-
     protected void Awake(){
         _rigidBody2D = GetComponent<Rigidbody2D>();
         _photonView = GetComponent<PhotonView>();
         _nickName.text = _photonView.IsMine ? PhotonNetwork.NickName : _photonView.Owner.NickName;
         _nickName.color = _photonView.IsMine ? Color.green : Color.red;
+        _actions = new Dictionary<string, IAction>{
+            {"Attack", new AttackAction {Owner = this}},
+            {"Defend", new DefendAction {Owner = this}},
+            {"Dash", new DashAction {Owner = this}},
+        };
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo message){
@@ -67,40 +55,19 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    public int GetHp{
-        get => _currentHp;
-    }
-    public Text GetNickName{
-        get => _nickName;
-    }
-    public bool GetPhotonIsMine{
-        get => _photonView.IsMine;
-    }
+    public Animator GetAnimator{ get => animator; }
+    public Sword CharacterWeapon{ get => sword; }
+    public Rigidbody2D RigidBody{ get => _rigidBody2D; }
+    public int GetHp{ get => _currentHp; }
+    public Text GetNickName{ get => _nickName; }
+    public bool GetPhotonIsMine{ get => _photonView.IsMine; }
+    public Dictionary<string, IAction> Actions { get => _actions; }
 
-    //스킬 쿨타임
-    public float DashTime{
-        get => _dashTime;
-    }
-    public float DashCoolTime{
-        get => _dashCooldown;
-    }
-    public float DefendTime{
-        get => _defendTime;
-    }
-    public float DefendCoolTime{
-        get => _defendCooldown;
-    }
-    public float AttackTime{
-        get => _attackTime;
-    }
-    public float AttackCooldown{
-        get => _attackCooldown;
-    }
     public abstract void Move();
 
     public void GetDamage(Character character){
         if(!_photonView.IsMine) return;
-        if(!(_isDefending && FaceToOther(character.transform.position))){
+        if(!(_actions["Defend"].Playing && FaceToOther(character.transform.position))){
             _currentHp -= _damage;
             if(_currentHp <= 0) {
                 _photonView.RPC("Die", RpcTarget.All);
@@ -117,15 +84,6 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    public IEnumerator Attack(){
-        _isAttacking = true;
-        animator.SetTrigger("attack");
-        _photonView.RPC("PlayTriggerAnimation", RpcTarget.All, "attack");
-        StartCoroutine(sword.Use());
-        yield return new WaitForSeconds(_attackCooldown);
-        _isAttacking = false;
-    }
-
     [PunRPC]
     protected void PlayTriggerAnimation(string triggerName){
         animator.SetTrigger(triggerName);
@@ -138,17 +96,6 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 2f * Time.deltaTime);
     }
     
-    public IEnumerator Defend(){
-        _canDefend = false;
-        _isDefending = true;
-        animator.SetBool("isDefending", true);
-        yield return new WaitForSeconds(_defendTime);
-        _isDefending = false;
-        animator.SetBool("isDefending", false);
-        yield return new WaitForSeconds(_defendCooldown);
-        _canDefend = true;
-    }
-    
     public bool FaceToOther(Vector3 otherPosition){
         Vector2 directionToOther = (otherPosition - transform.position).normalized;
         if(Vector2.Angle(transform.up, directionToOther) < 40f){
@@ -159,21 +106,8 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
 
     [PunRPC]
     public void Dash(Vector2 direction){
-        StartCoroutine(DashCoroutine(direction));
-    }
-
-    public IEnumerator DashCoroutine(Vector2 direction){
-        float startTime = Time.time;
-        _canDash = false;
-        _isDashing = true;
-        while(Time.time - startTime < _dashTime){
-            _rigidBody2D.velocity = direction * _dashSpeed;
-            yield return null;
-        }
-        _rigidBody2D.velocity = Vector2.zero;
-        _isDashing = false;
-        yield return new WaitForSeconds(_dashCooldown);
-        _canDash = true;
+        dashDirection = direction;
+        StartCoroutine(_actions["Dash"].Execute());
     }
 
     public void OnTriggerEnter2D(Collider2D other){

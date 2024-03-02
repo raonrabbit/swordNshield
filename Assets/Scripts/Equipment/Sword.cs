@@ -26,7 +26,7 @@ public class Sword : MonoBehaviour, IEquipment
 
     public IEnumerator Use(){
         EnableSwordCollider();
-        yield return new WaitForSeconds(selfCharacter.AttackTime);
+        yield return new WaitForSeconds(selfCharacter.Actions["Attack"].ActionTime);
         DisableSwordCollider();
     }
 

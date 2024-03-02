@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
@@ -11,11 +10,6 @@ public class PlayerController : Character
     private Vector2 movement;
 
     public GameObject RightHand;
-    private float angle;
-    private Vector2 player;
-
-    //Animator 변수
-    private bool isMoving;
 
     //스킬 쿨타임 표시
     public delegate void PlayerSkill();
@@ -40,16 +34,16 @@ public class PlayerController : Character
 
             movement = new Vector2(moveHorizontal, moveVertical);
             movement = movement.normalized;
-            if(Input.GetKey(KeyCode.Space) && _canDash) {
+            if(Input.GetKey(KeyCode.Space) && _actions["Dash"].CanExecute) {
                 OnDash?.Invoke();
                 Dash(movement);
                 _photonView.RPC("Dash", RpcTarget.All, movement);
             }
-            if(!_isDashing) Move();
+            if(!_actions["Dash"].Playing) Move();
             Look(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         }
         else{
-            if(!_isDashing){
+            if(!_actions["Dash"].Playing){
                 if((transform.position - _currentPosition).sqrMagnitude >= 2) transform.position = _currentPosition;
                 else transform.position = Vector3.Lerp(transform.position, _currentPosition, Time.deltaTime * 10);
                 transform.rotation = Quaternion.Lerp(transform.rotation, _currentRotation, Time.deltaTime * 10);
@@ -72,9 +66,10 @@ public class PlayerController : Character
 
     IEnumerator AttackCoroutine(){
         while(true){
-            if(Input.GetMouseButtonDown(0) && !_isAttacking){
+            if(Input.GetMouseButtonDown(0) && _actions["Attack"].CanExecute){
                 if(photonView.IsMine) OnAttack?.Invoke();
-                StartCoroutine(Attack());
+                StartCoroutine(sword.Use());
+                StartCoroutine(_actions["Attack"].Execute());
             }
             yield return null;
         }
@@ -82,9 +77,9 @@ public class PlayerController : Character
 
     IEnumerator DefendCoroutine(){
         while(true){
-            if(_canDefend && Input.GetKeyDown(KeyCode.LeftShift)){
+            if(_actions["Defend"].CanExecute && Input.GetKeyDown(KeyCode.LeftShift)){
                 OnShield?.Invoke();
-                StartCoroutine(Defend());
+                StartCoroutine(_actions["Defend"].Execute());
             }
             yield return null;
         }

@@ -102,7 +102,7 @@ public class AIController : Character
     private IEnumerator AttackCoroutine(){
         while(true){
             if(target != null && Vector2.Distance(transform.position, target.position) < sword.SwordLength){
-                StartCoroutine(Attack());
+                StartCoroutine(_actions["Attack"].Execute());
             }
             yield return null;
         }

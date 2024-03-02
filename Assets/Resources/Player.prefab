@@ -935,7 +935,7 @@ MonoBehaviour:
   _nickName: {fileID: 3016203194852809501}
   _speed: 2
   _currentHp: 100
-  _isDefending: 0
+  dashDirection: {x: 0, y: 0}
   RightHand: {fileID: 83949271404420883}
 --- !u!95 &4720054452727937942
 Animator:
