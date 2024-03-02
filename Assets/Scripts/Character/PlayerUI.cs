@@ -9,8 +9,10 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Image DashSkillImage;
     [SerializeField] private Image ShieldSkillImage;
     [SerializeField] private Image AttackSkillImage;
-    private void OnEnable(){
+    private Dictionary<string, IAction> Actions;
+    private void Awake(){
         if(character._photonView.IsMine){
+            Actions = character.Actions;
             DashSkillImage = CoolTimeUI.Instance.DashSkillImage;
             ShieldSkillImage = CoolTimeUI.Instance.ShieldSkillImage;
             AttackSkillImage = CoolTimeUI.Instance.AttackSkillImage;
@@ -21,46 +23,20 @@ public class PlayerUI : MonoBehaviour
     }
 
 
-    private void OnDash(){
-        StartCoroutine(CoolDownDash());
-    }
-    private IEnumerator CoolDownDash(){
-        yield return new WaitForSeconds(character.DashTime);
+
+    private void OnDash(){ StartCoroutine(CoolDownImage(DashSkillImage, Actions["Dash"].ActionTime, Actions["Dash"].CoolDownTime)); }
+    private void OnShield(){ StartCoroutine(CoolDownImage(ShieldSkillImage, Actions["Defend"].ActionTime, Actions["Defend"].CoolDownTime)); }
+    private void OnAttack(){ StartCoroutine(CoolDownImage(AttackSkillImage, Actions["Attack"].ActionTime, Actions["Dash"].CoolDownTime)); }
+
+    private IEnumerator CoolDownImage(Image skillImage, float actionTime, float coolDownTime){
+        yield return new WaitForSeconds(actionTime);
         float currentCoolDown = 0;
-        DashSkillImage.fillAmount = 0;
-        while(currentCoolDown < character.DashCoolTime){
+        skillImage.fillAmount = 0;
+        while(currentCoolDown < coolDownTime){
             currentCoolDown += Time.deltaTime;
-            DashSkillImage.fillAmount = currentCoolDown / character.DashCoolTime;
+            skillImage.fillAmount = currentCoolDown / coolDownTime;
             yield return null;
         }
-        DashSkillImage.fillAmount = 1;
-    }
-    private void OnShield(){
-        StartCoroutine(CoolDownShield());
-    }
-    private IEnumerator CoolDownShield(){
-        yield return new WaitForSeconds(character.DefendTime);
-        float currentCoolDown = 0;
-        ShieldSkillImage.fillAmount = 0;
-        while(currentCoolDown < character.DefendCoolTime){
-            currentCoolDown += Time.deltaTime;
-            ShieldSkillImage.fillAmount = currentCoolDown / character.DefendCoolTime;
-            yield return null;
-        }
-        ShieldSkillImage.fillAmount = 1;
-    }
-    private void OnAttack(){
-        StartCoroutine(CoolDownAttack());
-    }
-    private IEnumerator CoolDownAttack(){
-        yield return new WaitForSeconds(character.AttackTime);
-        float currentCoolDown = 0;
-        AttackSkillImage.fillAmount = 0;
-        while(currentCoolDown < character.AttackCooldown){
-            currentCoolDown += Time.deltaTime;
-            AttackSkillImage.fillAmount = currentCoolDown / character.AttackCooldown;
-            yield return null;
-        }
-        AttackSkillImage.fillAmount = 1;
+        skillImage.fillAmount = 1;
     }
 }
