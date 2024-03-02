@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TileMap
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 450ab6329bb4d4046900b636b505d414: 524289719
+    - 450ab6329bb4d4046900b636b505d414: 1075287795
+    - 450ab6329bb4d4046900b636b505d414: -1553095800
+    - 450ab6329bb4d4046900b636b505d414: -1648414490
+    - 450ab6329bb4d4046900b636b505d414: -1056588649
+    - 450ab6329bb4d4046900b636b505d414: -1846667163
+    - 450ab6329bb4d4046900b636b505d414: -838068883
+    - 450ab6329bb4d4046900b636b505d414: -33744463
+    - 450ab6329bb4d4046900b636b505d414: 1378112161
+    - 450ab6329bb4d4046900b636b505d414: -1057434583
+    - 450ab6329bb4d4046900b636b505d414: 1097537503
+    - 450ab6329bb4d4046900b636b505d414: -1312410951
+    - 450ab6329bb4d4046900b636b505d414: -1450803343
+    - 450ab6329bb4d4046900b636b505d414: -1926683206
+    - 450ab6329bb4d4046900b636b505d414: 1771431270
+    - 450ab6329bb4d4046900b636b505d414: -1263742339
+    - 450ab6329bb4d4046900b636b505d414: -1458296589
+    - 450ab6329bb4d4046900b636b505d414: -1704621798
+    - 450ab6329bb4d4046900b636b505d414: 8537651536920830917
+    - 450ab6329bb4d4046900b636b505d414: 1376943512
+    - 450ab6329bb4d4046900b636b505d414: 1761823741
+    - 450ab6329bb4d4046900b636b505d414: 1592928430
+    - 450ab6329bb4d4046900b636b505d414: -1617810159
+    - 450ab6329bb4d4046900b636b505d414: 747906752
+    - 450ab6329bb4d4046900b636b505d414: 1418581937
+    - 450ab6329bb4d4046900b636b505d414: -367300214
+    - 450ab6329bb4d4046900b636b505d414: 1949994864
+    - 450ab6329bb4d4046900b636b505d414: -1236974409
+    - 450ab6329bb4d4046900b636b505d414: 1438287729
+    - 450ab6329bb4d4046900b636b505d414: -1964088013
+    - 450ab6329bb4d4046900b636b505d414: -1342490092
+    - 450ab6329bb4d4046900b636b505d414: -1411064226
+    - 450ab6329bb4d4046900b636b505d414: -143423434
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 524289719, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 1075287795, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1553095800, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1648414490, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1056588649, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1846667163, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -838068883, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -33744463, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 1378112161, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1057434583, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 1097537503, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1312410951, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1450803343, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1926683206, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 1771431270, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1263742339, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1458296589, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1704621798, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 8537651536920830917, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 1376943512, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 1761823741, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 1592928430, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1617810159, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 747906752, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 1418581937, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -367300214, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 1949994864, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1236974409, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: 1438287729, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1964088013, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1342490092, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -1411064226, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  - {fileID: -143423434, guid: 450ab6329bb4d4046900b636b505d414, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - TileMap_19
+  - TileMap_18
+  - TileMap_15
+  - TileMap_14
+  - TileMap_17
+  - TileMap_16
+  - TileMap_11
+  - TileMap_10
+  - TileMap_13
+  - TileMap_12
+  - TileMap_8
+  - TileMap_9
+  - TileMap_6
+  - TileMap_7
+  - TileMap_4
+  - TileMap_5
+  - TileMap_2
+  - TileMap_3
+  - TileMap_0
+  - TileMap_1
+  - TileMap_24
+  - TileMap_25
+  - TileMap_26
+  - TileMap_27
+  - TileMap_20
+  - TileMap_21
+  - TileMap_22
+  - TileMap_23
+  - TileMap_32
+  - TileMap_31
+  - TileMap_30
+  - TileMap_28
+  - TileMap_29
+  m_RenderDataMap: {}
+  m_Tag: TileMap
+  m_IsVariant: 0
