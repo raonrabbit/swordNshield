@@ -23,9 +23,14 @@ public class PlayerUI : MonoBehaviour
     }
 
     private void OnDestroy(){
-        PlayerController.OnDash -= OnDash;
-        PlayerController.OnShield -= OnShield;
-        PlayerController.OnAttack -= OnAttack;
+        if(character._photonView.IsMine){
+            DashSkillImage.fillAmount = 1;
+            ShieldSkillImage.fillAmount = 1;
+            AttackSkillImage.fillAmount = 1;
+            PlayerController.OnDash -= OnDash;
+            PlayerController.OnShield -= OnShield;
+            PlayerController.OnAttack -= OnAttack;
+        }
     }
 
     private void OnDash(){ StartCoroutine(CoolDownImage(DashSkillImage, Actions["Dash"].ActionTime, Actions["Dash"].CoolDownTime)); }
