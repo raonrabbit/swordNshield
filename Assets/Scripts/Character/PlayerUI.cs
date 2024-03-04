@@ -14,8 +14,11 @@ public class PlayerUI : MonoBehaviour
         if(character._photonView.IsMine){
             Actions = character.Actions;
             DashSkillImage = CoolTimeUI.Instance.DashSkillImage;
+            DashSkillImage.fillAmount = 1;
             ShieldSkillImage = CoolTimeUI.Instance.ShieldSkillImage;
+            ShieldSkillImage.fillAmount = 1;
             AttackSkillImage = CoolTimeUI.Instance.AttackSkillImage;
+            AttackSkillImage.fillAmount = 1;
             PlayerController.OnDash += OnDash;
             PlayerController.OnShield += OnShield;
             PlayerController.OnAttack += OnAttack;
@@ -24,9 +27,6 @@ public class PlayerUI : MonoBehaviour
 
     private void OnDestroy(){
         if(character._photonView.IsMine){
-            DashSkillImage.fillAmount = 1;
-            ShieldSkillImage.fillAmount = 1;
-            AttackSkillImage.fillAmount = 1;
             PlayerController.OnDash -= OnDash;
             PlayerController.OnShield -= OnShield;
             PlayerController.OnAttack -= OnAttack;
