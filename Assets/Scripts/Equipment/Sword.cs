@@ -16,7 +16,7 @@ public class Sword : MonoBehaviour, IEquipment
         get => selfCharacter;
     }
 
-    private void Start(){
+    private void Awake(){
         selfCharacter = transform.root.GetComponent<Character>();
         swordCollider = GetComponent<BoxCollider2D>();
         swordSpriteRenderer = GetComponent<SpriteRenderer>();
