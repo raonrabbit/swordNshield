@@ -13,7 +13,6 @@ public class CoolTimeUI : MonoBehaviour
     void Awake(){
         if(instance == null) instance = this;
         else Destroy(this.gameObject);
-        DontDestroyOnLoad(gameObject);
     }
 
     public static CoolTimeUI Instance{
