@@ -35,7 +35,7 @@ public class PlayerUI : MonoBehaviour
 
     private void OnDash(){ StartCoroutine(CoolDownImage(DashSkillImage, Actions["Dash"].ActionTime, Actions["Dash"].CoolDownTime)); }
     private void OnShield(){ StartCoroutine(CoolDownImage(ShieldSkillImage, Actions["Defend"].ActionTime, Actions["Defend"].CoolDownTime)); }
-    private void OnAttack(){ StartCoroutine(CoolDownImage(AttackSkillImage, Actions["Attack"].ActionTime, Actions["Dash"].CoolDownTime)); }
+    private void OnAttack(){ StartCoroutine(CoolDownImage(AttackSkillImage, Actions["Attack"].ActionTime, Actions["Attack"].CoolDownTime)); }
 
     private IEnumerator CoolDownImage(Image skillImage, float actionTime, float coolDownTime){
         yield return new WaitForSeconds(actionTime);
