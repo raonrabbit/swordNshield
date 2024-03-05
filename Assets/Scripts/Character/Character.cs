@@ -18,8 +18,8 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     protected Dictionary<string, IAction> _actions;
     //기본 설정
     [SerializeField] protected float _speed = 2f;
-    protected int _maxHp = 100;
-    [SerializeField] protected int _currentHp = 100;
+    protected int _maxHp = 200;
+    [SerializeField] protected int _currentHp = 200;
     protected int _damage = 40;
 
     //Dash Direction
