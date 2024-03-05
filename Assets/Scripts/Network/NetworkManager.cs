@@ -18,7 +18,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
 
     public override void OnConnectedToMaster(){
-        PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions{ MaxPlayers = 6 }, null);
+        PhotonNetwork.JoinOrCreateRoom("SwordNShieldRoom", new RoomOptions{ MaxPlayers = 20 }, null);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("Failed to join room: " + message + ". Retrying..");
+        PhotonNetwork.JoinOrCreateRoom("SwordNShieldRoom", new RoomOptions{ MaxPlayers = 20 }, null);
     }
 /*
     public override void OnJoinedRoom(){
