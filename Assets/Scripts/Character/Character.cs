@@ -28,11 +28,14 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     //동기화
     protected Vector3 _currentPosition;
     protected Quaternion _currentRotation;
+
+    public KillScoreManager killScoreManager;
     protected void Awake(){
         _rigidBody2D = GetComponent<Rigidbody2D>();
         _photonView = GetComponent<PhotonView>();
         _nickName.text = _photonView.IsMine ? PhotonNetwork.NickName : _photonView.Owner.NickName;
         _nickName.color = _photonView.IsMine ? Color.green : Color.red;
+        killScoreManager = KillScoreManager.Instance;
         _actions = new Dictionary<string, IAction>{
             {"Attack", new AttackAction {Owner = this}},
             {"Defend", new DefendAction {Owner = this}},
@@ -70,6 +73,7 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
         if(!(_actions["Defend"].Playing && FaceToOther(character.transform.position))){
             _currentHp -= _damage;
             if(_currentHp <= 0) {
+                character.killScoreManager.photonView.RPC("KillPlayer", RpcTarget.All, character._photonView.Owner);
                 _photonView.RPC("Die", RpcTarget.All);
                 Die();
             }
