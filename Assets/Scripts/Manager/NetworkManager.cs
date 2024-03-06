@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
@@ -14,6 +13,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public CinemachineVirtualCamera virtualCamera;
     public GameObject player;
     public GameObject loadingUI;
+    public GameObject SameNickNameMessage;
 
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
 
@@ -35,13 +35,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void Awake(){
         Connect();
+        SameNickNameMessage.SetActive(false);
         PlayerController.OnDeath += ExitToLobby;
     }
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) PhotonNetwork.Disconnect();
+        if (Input.GetKeyDown(KeyCode.Escape)) ExitToLobby();
     }
 
-    public void Spawn(){
+    public void Spawn()
+    {
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            if (player.NickName == nameInput.text)
+            {
+                SameNickNameMessage.SetActive(true);
+                return;
+            }
+        }
+        SameNickNameMessage.SetActive(false);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "Score", 0 } });
         loadingUI.SetActive(true);
         if(!PhotonNetwork.IsConnected) Connect();
         StartCoroutine(JoinRoom());
@@ -51,14 +63,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         while(!PhotonNetwork.InRoom){
             yield return null;
         }
-        PhotonNetwork.LocalPlayer.NickName = nameInput.text;
+
+        var nickname = nameInput.text;
+        PhotonNetwork.LocalPlayer.NickName = nickname;
         player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
         loadingUI.SetActive(false);
         lobbyPanel.SetActive(false);
         virtualCamera.Follow = player.transform;
     }
 
-    public void ExitToLobby(){
+    public void ExitToLobby()
+    {
+        PhotonNetwork.LocalPlayer.NickName = "";
         lobbyPanel.SetActive(true);
     }
 
