@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 1394356441}
-  name: {fileID: 1026678912}
+  playerName: {fileID: 1026678912}
   killCount: {fileID: 1753489185}
 --- !u!222 &108682584
 CanvasRenderer:
@@ -1188,7 +1188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 1323757573}
-  name: {fileID: 2093936071}
+  playerName: {fileID: 2093936071}
   killCount: {fileID: 1313789540}
 --- !u!222 &438471810
 CanvasRenderer:
@@ -38094,7 +38094,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 1411861661}
-  name: {fileID: 1303579237}
+  playerName: {fileID: 1303579237}
   killCount: {fileID: 916654965}
 --- !u!222 &1179810872
 CanvasRenderer:
@@ -38740,7 +38740,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 378640440}
-  name: {fileID: 681533708}
+  playerName: {fileID: 681533708}
   killCount: {fileID: 900048114}
 --- !u!222 &1317318543
 CanvasRenderer:
@@ -39431,7 +39431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 694592890}
-  name: {fileID: 1237097753}
+  playerName: {fileID: 1237097753}
   killCount: {fileID: 1530912293}
 --- !u!222 &1458442613
 CanvasRenderer:
@@ -39542,7 +39542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 1010621989}
-  name: {fileID: 1813738919}
+  playerName: {fileID: 1813738919}
   killCount: {fileID: 1604576871}
 --- !u!222 &1507524980
 CanvasRenderer:
@@ -39813,7 +39813,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 1347636739}
-  name: {fileID: 701285845}
+  playerName: {fileID: 701285845}
   killCount: {fileID: 577217697}
 --- !u!222 &1587306755
 CanvasRenderer:
@@ -40766,7 +40766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 469332438}
-  name: {fileID: 47594425}
+  playerName: {fileID: 47594425}
   killCount: {fileID: 1388295230}
 --- !u!222 &1880269330
 CanvasRenderer:
@@ -40829,7 +40829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 521196743}
-  name: {fileID: 98221154}
+  playerName: {fileID: 98221154}
   killCount: {fileID: 1453199498}
 --- !u!222 &1946411111
 CanvasRenderer:
@@ -40971,7 +40971,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 1956491806}
-  name: {fileID: 780839978}
+  playerName: {fileID: 780839978}
   killCount: {fileID: 428557539}
 --- !u!222 &1967973754
 CanvasRenderer:
@@ -41120,7 +41120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ranking: {fileID: 0}
-  name: {fileID: 0}
+  playerName: {fileID: 0}
   killCount: {fileID: 0}
 --- !u!1001 &2092028155
 PrefabInstance:
