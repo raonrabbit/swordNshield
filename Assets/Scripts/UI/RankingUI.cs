@@ -4,13 +4,13 @@ using UnityEngine.UI;
 public class RankingUI : MonoBehaviour
 {
     [SerializeField] Text ranking;
-    [SerializeField] private Text name;
+    [SerializeField] private Text playerName;
     [SerializeField] private Text killCount;
 
     public void Clear()
     {
         ranking.text = "";
-        name.text = "";
+        playerName.text = "";
         killCount.text = "";
     }
 
@@ -21,7 +21,7 @@ public class RankingUI : MonoBehaviour
 
     public string Name
     {
-        set => name.text = value;
+        set => playerName.text = value;
     }
 
     public string KillCount
