@@ -25,6 +25,7 @@ public class DashAction : IAction
             Owner.RigidBody.velocity = dashDirection * dashSpeed;
             yield return null;
         }
+        Owner.TargetPos = Owner.transform.position;
         Owner.RigidBody.velocity = Vector2.zero;
         isDashing = false;
         yield return new WaitForSeconds(coolDownTime);
