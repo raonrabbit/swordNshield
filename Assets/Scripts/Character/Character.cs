@@ -24,6 +24,7 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
 
     //Dash Direction
     public Vector2 dashDirection;
+    protected Vector2 targetPos;
 
     //동기화
     protected Vector3 _currentPosition;
@@ -47,12 +48,17 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
         if(stream.IsWriting)
         {
             stream.SendNext(transform.position);
+            // position이 아닌 TargetPos를 전달함으로써 이동 동기화
+            //stream.SendNext(targetPos);
             stream.SendNext(transform.rotation);
             stream.SendNext(_currentHp);
         }
         else
         {
             _currentPosition = (Vector3)stream.ReceiveNext();
+            
+            // position이 아닌 TargetPos를 전달받음
+            // targetPos = (Vector2)stream.ReceiveNext();
             _currentRotation = (Quaternion)stream.ReceiveNext();
             _currentHp = (int)stream.ReceiveNext();
         }
@@ -65,6 +71,10 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     public Text GetNickName{ get => _nickName; }
     public bool GetPhotonIsMine{ get => _photonView.IsMine; }
     public Dictionary<string, IAction> Actions { get => _actions; }
+    public Vector2 TargetPos
+    {
+        set => targetPos = value;
+    }
 
     public abstract void Move();
 
@@ -97,7 +107,7 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     public void Look(Vector3 target){
         float angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
         Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 2f * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 30f * Time.deltaTime);
     }
     
     public bool FaceToOther(Vector3 otherPosition){
