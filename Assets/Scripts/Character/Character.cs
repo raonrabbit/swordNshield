@@ -47,18 +47,18 @@ public abstract class Character : MonoBehaviourPunCallbacks, IPunObservable
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo message){
         if(stream.IsWriting)
         {
-            stream.SendNext(transform.position);
-            // position이 아닌 TargetPos를 전달함으로써 이동 동기화
-            //stream.SendNext(targetPos);
+            //stream.SendNext(transform.position);
+            //position이 아닌 TargetPos를 전달함으로써 이동 동기화
+            stream.SendNext(targetPos);
             stream.SendNext(transform.rotation);
             stream.SendNext(_currentHp);
         }
         else
         {
-            _currentPosition = (Vector3)stream.ReceiveNext();
+            //_currentPosition = (Vector3)stream.ReceiveNext();
             
             // position이 아닌 TargetPos를 전달받음
-            // targetPos = (Vector2)stream.ReceiveNext();
+            targetPos = (Vector2)stream.ReceiveNext();
             _currentRotation = (Quaternion)stream.ReceiveNext();
             _currentHp = (int)stream.ReceiveNext();
         }

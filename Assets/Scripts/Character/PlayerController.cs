@@ -31,42 +31,8 @@ public class PlayerController : Character
 
     void Update()
     {
-        if (!photonView.IsMine && !_actions["Dash"].Playing)
+        if (photonView.IsMine)
         {
-            //if((transform.position - _currentPosition).sqrMagnitude >= 10) transform.position = _currentPosition;
-            transform.position = Vector3.Lerp(transform.position, _currentPosition, Time.deltaTime * 10);
-            transform.rotation = Quaternion.Lerp(transform.rotation, _currentRotation, Time.deltaTime * 20);
-            /*
-            if (Vector2.Distance(transform.position, targetPos) < 0.2f) _rigidBody2D.velocity = Vector2.zero;
-            else
-            {
-                Vector2 direction = (targetPos - (Vector2)transform.position).normalized;
-                Vector2 newPosition = Vector2.Lerp(transform.position, direction * _speed, Time.fixedDeltaTime);
-                _rigidBody2D.MovePosition(newPosition);
-            }
-            transform.rotation = Quaternion.Lerp(transform.rotation, _currentRotation, Time.deltaTime * 15);
-            */
-        }
-    }
-    void FixedUpdate(){
-        if(photonView.IsMine){
-            //마우스 방향 바라보기 & 키보드로 이동
-            /*
-            float moveHorizontal = Input.GetAxis(HORIZONTAL);
-            float moveVertical = Input.GetAxis(VERTICAL);
-
-            movement = new Vector2(moveHorizontal, moveVertical);
-            movement = movement.normalized;
-            if(Input.GetKey(KeyCode.Space) && _actions["Dash"].CanExecute) {
-                OnDash?.Invoke();
-                Dash(movement);
-                _photonView.RPC("Dash", RpcTarget.All, movement);
-            }
-            if(!_actions["Dash"].Playing) Move();
-            Look(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            */
-            
-            // 우클릭으로 이동 & 우클릭 방향 바라보기
             if (Input.GetMouseButton(1))
             {
                 targetPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -79,15 +45,29 @@ public class PlayerController : Character
                 OnDash?.Invoke();
                 Vector2 dashDir = mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 Dash(dashDir.normalized);
+                photonView.RPC("Dash", RpcTarget.All, dashDir.normalized);
             }
-
+        }
+    }
+    void FixedUpdate(){
+        if(photonView.IsMine){
             if (!_actions["Dash"].Playing)
             {
-                if (Vector2.Distance(transform.position, targetPos) < 0.2f) _rigidBody2D.velocity = Vector2.zero;
+                if (Vector2.Distance(transform.position, targetPos) < 0.2f)
+                {
+                    targetPos = transform.position;
+                    _rigidBody2D.velocity = Vector2.zero;
+                }
                 else Move();
                 if(_rigidBody2D.velocity != Vector2.zero) animator.SetBool("isMoving", true);
                 else animator.SetBool("isMoving", false);
             }
+        }
+        else if (!_actions["Dash"].Playing)
+        {
+            if (Vector2.Distance(transform.position, targetPos) < 0.2f) _rigidBody2D.velocity = Vector2.zero;
+            else Move();
+            transform.rotation = Quaternion.Lerp(transform.rotation, _currentRotation, Time.fixedDeltaTime * 18);
         }
     }
     [PunRPC]
