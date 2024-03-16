@@ -911,6 +911,7 @@ GameObject:
   - component: {fileID: 8909872638109087551}
   - component: {fileID: 1436449323331373245}
   - component: {fileID: 3101373631141346144}
+  - component: {fileID: -92628625168395428}
   m_Layer: 7
   m_Name: Player
   m_TagString: Character
@@ -1226,7 +1227,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &3101373631141346144
 MonoBehaviour:
@@ -1261,6 +1262,18 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
+--- !u!114 &-92628625168395428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7927529995917726068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7af6a8a77c7a8c1409dc54a53b41e011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8393584979581071551
 GameObject:
   m_ObjectHideFlags: 0
