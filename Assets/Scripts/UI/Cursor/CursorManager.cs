@@ -24,7 +24,6 @@ public class CursorManager : MonoBehaviour
 
     public void SetAttackCursor()
     {
-        Debug.Log("Change to attack");
         Cursor.SetCursor(attackCursor, Vector2.zero, CursorMode.Auto);
     }
 }
