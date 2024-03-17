@@ -47,6 +47,9 @@ public class PlayerController : Character
                 Dash(dashDir.normalized);
                 photonView.RPC("Dash", RpcTarget.All, dashDir.normalized);
             }
+            
+            if(_rigidBody2D.velocity != Vector2.zero) animator.SetBool("isMoving", true);
+            else animator.SetBool("isMoving", false);
         }
     }
     void FixedUpdate(){
@@ -59,8 +62,6 @@ public class PlayerController : Character
                     _rigidBody2D.velocity = Vector2.zero;
                 }
                 else Move();
-                if(_rigidBody2D.velocity != Vector2.zero) animator.SetBool("isMoving", true);
-                else animator.SetBool("isMoving", false);
             }
         }
         else if (!_actions["Dash"].Playing)
