@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class PlayerController : Character
 {
-    private const string HORIZONTAL = "Horizontal";
-    private const string VERTICAL = "Vertical";
-    //private Vector2 movement;
-
-    public GameObject RightHand;
     private Camera mainCamera;
 
     //스킬 쿨타임 표시
