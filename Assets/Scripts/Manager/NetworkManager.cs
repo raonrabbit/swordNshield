@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using Cinemachine;
+using SwordNShield.Controller;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -66,7 +67,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         var nickname = nameInput.text;
         PhotonNetwork.LocalPlayer.NickName = nickname;
-        player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        player = PhotonNetwork.Instantiate("Player1", Vector3.zero, Quaternion.identity);
         loadingUI.SetActive(false);
         lobbyPanel.SetActive(false);
         virtualCamera.Follow = player.transform;
