@@ -35,6 +35,7 @@ namespace SwordNShield.Movement
 
         public void StartRotateAction(float angle, float speed)
         {
+            if (!canRotate) return;
             if(RotateTowards!=null) StopCoroutine(RotateTowards);
             RotateTowards = StartCoroutine(Look(angle, speed));
         }
