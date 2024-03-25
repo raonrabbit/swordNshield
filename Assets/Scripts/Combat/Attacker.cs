@@ -39,6 +39,7 @@ public class Attacker : MonoBehaviourPunCallbacks, IAction
     public void Cancel()
     {
         if(AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+        canAttack = true;
     }
 
     private IEnumerator Attack(Health target)
@@ -57,7 +58,7 @@ public class Attacker : MonoBehaviourPunCallbacks, IAction
                 rotater.StartRotateAction(angle, stat.RotateSpeed);
                 if (CanAttack)
                 {
-                    photonView.RPC("PlayTriggerAnimation", Photon.Pun.RpcTarget.All, "attack");
+                    photonView.RPC("PlayTriggerAnimation", RpcTarget.All, "attack");
                     target.GetDamage(gameObject, stat.AttackDamage);
                     if (target == null || target.IsDead()) Cancel();
                     startTime = Time.time;
