@@ -1,16 +1,21 @@
+using System;
 using UnityEngine;
 using System.Collections;
+using SwordNShield.Controller;
 
 namespace SwordNShield.Combat.Skills
 {
     public class Dash : MonoBehaviour, ISkill
     {
-        public Controller.PlayerController Owner { get; set; }
+        public PlayerController Owner { get; set; }
+        
+        public event EventHandler PlaySkill;
         [SerializeField] private Sprite skillImage;
         [SerializeField] private KeyCode keyCode = KeyCode.F;
         [SerializeField] private float coolTime = 3f;
         [SerializeField] private float actionTime = 0.5f;
         [SerializeField] private float dashSpeed = 10f;
+
         private bool canExecute = true;
         private bool isDashing;
         private Vector2 dashDirection;
@@ -27,7 +32,7 @@ namespace SwordNShield.Combat.Skills
             set => keyCode = value;
         }
 
-        public Sprite SkillImage => skillImage;
+        public Sprite SkillSprite => skillImage;
         public bool CanExecute => canExecute;
         public bool IsPlaying => isDashing;
         public float CoolTime => coolTime;
@@ -42,6 +47,7 @@ namespace SwordNShield.Combat.Skills
         public IEnumerator Execute()
         {
             if (!canExecute) yield break;
+            PlaySkill!.Invoke(this, EventArgs.Empty);
             Owner.GetMover.CanMove = false;
             dashDirection = (Owner.GetMouseRay() - (Vector2)transform.position).normalized;
             float startTime = Time.time;
