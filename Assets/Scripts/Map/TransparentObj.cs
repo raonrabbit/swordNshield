@@ -1,4 +1,4 @@
-using System;
+using SwordNShield.Controller;
 using UnityEngine;
 
 public class TransparentObj : MonoBehaviour
@@ -15,20 +15,14 @@ public class TransparentObj : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D other)
     {
-        Character character = other.GetComponent<Character>();
-        if (character == null)
+        var to = other.GetComponent<TransparentObj>();
+        if (to != null) return;
+        var spriteRenderers = other.GetComponentsInChildren<SpriteRenderer>();
+        var playerPhotonController = other.GetComponent<PlayerPhotonController>();
+        if (playerPhotonController == null) return;
+        if (playerPhotonController.photonView.IsMine)
         {
-            TransparentObj to = other.GetComponent<TransparentObj>();
-            if (to != null)
-            {
-                Function(true);
-            }
-            return;
-        }
-        SpriteRenderer[] spriteRenderers = character.GetComponentsInChildren<SpriteRenderer>();
-        if (character._photonView.IsMine)
-        {
-            Function(true);
+            ChangeTransparentRate(true);
             foreach (SpriteRenderer spriteRenderer in spriteRenderers)
             {
                 var color = spriteRenderer.color;
@@ -38,7 +32,7 @@ public class TransparentObj : MonoBehaviour
         }
         else
         {
-            var canvasGroup = character.GetComponent<CanvasGroup>();
+            var canvasGroup = other.GetComponent<CanvasGroup>();
             canvasGroup.alpha = otherTransparentRate;
             foreach (SpriteRenderer spriteRenderer in spriteRenderers)
             {
@@ -51,23 +45,17 @@ public class TransparentObj : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        Character character = other.GetComponent<Character>();
-        if (character == null)
+        var playerController = other.GetComponent<SwordNShield.Controller.PlayerController>();
+        if (playerController != null)
         {
-            TransparentObj to = other.GetComponent<TransparentObj>();
-            if (to != null) Function(false);
-            return;
-        }
-        if (character._photonView.IsMine)
-        {
-            Function(false);
+            ChangeTransparentRate(false);
         }
         else
         {
-            var canvasGroup = character.GetComponent<CanvasGroup>();
+            var canvasGroup = other.GetComponent<CanvasGroup>();
             canvasGroup.alpha = 1f;
         }
-        SpriteRenderer[] spriteRenderers = character.GetComponentsInChildren<SpriteRenderer>();
+        SpriteRenderer[] spriteRenderers = other.GetComponentsInChildren<SpriteRenderer>();
         foreach (SpriteRenderer spriteRenderer in spriteRenderers)
         {
             var color = spriteRenderer.color;
@@ -76,7 +64,7 @@ public class TransparentObj : MonoBehaviour
         }
     }
 
-    private void Function(bool isActivate)
+    private void ChangeTransparentRate(bool isActivate)
     {
         if (isActivate)
         {
