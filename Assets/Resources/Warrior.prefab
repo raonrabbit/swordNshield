@@ -510,13 +510,15 @@ GameObject:
   - component: {fileID: -4688145329019948346}
   - component: {fileID: 3979248005826926240}
   - component: {fileID: 5637545468397203577}
+  - component: {fileID: -2341668412760313403}
   - component: {fileID: 1369205940670919149}
+  - component: {fileID: 119989333200947950}
   - component: {fileID: 3021254389827077746}
   - component: {fileID: -8930835377183530902}
   - component: {fileID: 3496365431665678885}
   - component: {fileID: 4875401537346698644}
   m_Layer: 7
-  m_Name: Player1
+  m_Name: Warrior
   m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -779,7 +781,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b619da8cd046e491210cdc9b9c9208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionSheduler: {fileID: 5637545468397203577}
+  actionScheduler: {fileID: 0}
 --- !u!114 &5135592272790609130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -867,6 +869,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f3fb0f1122445f49879399d87229703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2341668412760313403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6041326530381493163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f476349b1193c0c4aaa93b6f4ee58d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1369205940670919149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -879,6 +893,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32cf3033e5491db48b33a8160a463edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &119989333200947950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6041326530381493163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 224c04e27e3a55a4e97c98a2e9dff1c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationClip: {fileID: 7400000, guid: 540799bc78075fe47a424e4f69a66941, type: 2}
+  skillImage: {fileID: 21300000, guid: f6b8b85cbdc82ce439a41ae3d56d57ee, type: 3}
+  keyCode: 119
+  coolTime: 5
+  actionTime: 3
 --- !u!114 &3021254389827077746
 MonoBehaviour:
   m_ObjectHideFlags: 0
