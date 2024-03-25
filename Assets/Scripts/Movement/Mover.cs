@@ -6,8 +6,8 @@ namespace SwordNShield.Movement
 {
     public class Mover : MonoBehaviour, Function.IAction
     {
-        [SerializeField] private Rigidbody2D rigidbody2D;
-        [SerializeField] private Animator animator;
+        private Rigidbody2D rigidbody2D;
+        private Animator animator;
         private ActionScheduler actionScheduler;
         private Coroutine MoveTowards = null;
         private bool canMove;
