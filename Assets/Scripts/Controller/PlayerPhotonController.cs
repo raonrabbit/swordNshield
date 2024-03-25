@@ -7,6 +7,7 @@ namespace SwordNShield.Controller
 {
     public class PlayerPhotonController : MonoBehaviourPunCallbacks, IPunObservable
     {
+        private Animator animator;
         private Stat stat;
         //private PhotonView photonView;
         private Vector2 localPosition;
@@ -14,7 +15,6 @@ namespace SwordNShield.Controller
         private Vector2 localVelocity;
         private float localAngularVelocity;
         private Rigidbody2D rigidbody2D;
-        private float localHP;
         private Mover mover;
         private Rotater rotater;
         private float moveSpeed;
@@ -24,6 +24,7 @@ namespace SwordNShield.Controller
         
         private void Awake()
         {
+            animator = GetComponent<Animator>();
             stat = GetComponent<Stat>();
             //photonView = GetComponent<PhotonView>();
             rigidbody2D = GetComponent <Rigidbody2D>();
@@ -37,7 +38,6 @@ namespace SwordNShield.Controller
                 stream.SendNext(rigidbody2D.velocity);
                 stream.SendNext(rigidbody2D.rotation);
                 stream.SendNext(rigidbody2D.angularVelocity);
-                stream.SendNext(stat.HP);
             }
             else
             {
@@ -45,7 +45,6 @@ namespace SwordNShield.Controller
                 localVelocity = (Vector2)stream.ReceiveNext();
                 localRotation = (float)stream.ReceiveNext();
                 localAngularVelocity = (float)stream.ReceiveNext();
-                localHP = (float)stream.ReceiveNext();
                 
                 float lag = Mathf.Abs((float)(PhotonNetwork.Time - message.SentServerTime));
                 localPosition += localVelocity * lag;
@@ -59,6 +58,12 @@ namespace SwordNShield.Controller
             //rigidbody2D.position = Vector3.MoveTowards(rigidbody2D.position, localPosition, Time.fixedDeltaTime * 100);
             mover.StartMoveAction(localPosition, stat.MoveSpeed);
             rotater.StartRotateAction(localRotation, stat.RotateSpeed);
+        }
+        
+        [PunRPC]
+        public void PlayTriggerAnimation(string triggerName)
+        {
+            animator.SetTrigger(triggerName);
         }
     }
 }
