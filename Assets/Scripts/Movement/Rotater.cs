@@ -1,4 +1,5 @@
 using System.Collections;
+using SwordNShield.Combat;
 using SwordNShield.Function;
 using UnityEngine;
 
@@ -6,7 +7,8 @@ namespace SwordNShield.Movement
 {
     public class Rotater : MonoBehaviour, Function.IAction
     {
-        [SerializeField] private Animator animator;
+        private Rigidbody2D rigidbody2D;
+        private Animator animator;
         private ActionScheduler actionScheduler;
         private Coroutine RotateTowards = null;
         private bool isRotating;
@@ -14,6 +16,7 @@ namespace SwordNShield.Movement
         
         void Awake()
         {
+            rigidbody2D = GetComponent<Rigidbody2D>();
             actionScheduler = GetComponent<ActionScheduler>();
             animator = GetComponent<Animator>();
             isRotating = false;
@@ -30,22 +33,31 @@ namespace SwordNShield.Movement
             set => canRotate = value;
         }
 
-        public void StartRotateAction(Vector2 target)
+        public void StartRotateAction(float angle, float speed)
         {
             if(RotateTowards!=null) StopCoroutine(RotateTowards);
-            RotateTowards = StartCoroutine(Look(target));
+            RotateTowards = StartCoroutine(Look(angle, speed));
         }
         
-        public IEnumerator Look(Vector2 target){
-            float angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
-            Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-            while (Quaternion.Angle(transform.rotation, targetRotation) > 1.0f)
+        private IEnumerator Look(float angle, float speed){
+            //Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            float angleDifference = Mathf.DeltaAngle(rigidbody2D.rotation, angle);
+            while (Mathf.Abs(angleDifference) > 1.0f)
             {
                 isRotating = true;
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 30f * Time.deltaTime);
+                float newAngle = Mathf.MoveTowardsAngle(rigidbody2D.rotation, angle, speed * Time.deltaTime);
+                rigidbody2D.MoveRotation(newAngle);
+
+                angleDifference = Mathf.DeltaAngle(rigidbody2D.rotation, angle);
                 yield return null;
             }
+
             isRotating = false;
+        }
+
+        public float CalculateAngle(Vector2 A, Vector2 B)
+        {
+            return Mathf.Atan2(A.y - B.y, A.x - B.x) * Mathf.Rad2Deg - 90;
         }
 
         public void Cancel()
