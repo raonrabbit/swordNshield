@@ -59,11 +59,5 @@ namespace SwordNShield.Controller
             mover.StartMoveAction(localPosition, stat.MoveSpeed);
             rotater.StartRotateAction(localRotation, stat.RotateSpeed);
         }
-        
-        [PunRPC]
-        public void PlayTriggerAnimation(string triggerName)
-        {
-            animator.SetTrigger(triggerName);
-        }
     }
 }
