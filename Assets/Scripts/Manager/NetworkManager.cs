@@ -67,7 +67,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         var nickname = nameInput.text;
         PhotonNetwork.LocalPlayer.NickName = nickname;
-        player = PhotonNetwork.Instantiate("Player1", Vector3.zero, Quaternion.identity);
+        player = PhotonNetwork.Instantiate("Warrior", Vector3.zero, Quaternion.identity);
         loadingUI.SetActive(false);
         lobbyPanel.SetActive(false);
         virtualCamera.Follow = player.transform;
