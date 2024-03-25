@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using SwordNShield.Attributes;
@@ -11,45 +12,54 @@ namespace SwordNShield.Controller
 {
     public class PlayerController : MonoBehaviourPunCallbacks
     {
+        private Stat stat;
         private Health health;
+        private Attacker attacker;
         private Mover mover;
         private Rotater rotater;
         private List<ISkill> playerSkills;
         public ActionScheduler actionSheduler;
+        static public event Action OnDeath ;
         
-        [SerializeField] private float raycastRadius = 1f;
-        [SerializeField] private float speed = 1f;
-        
+        private float raycastRadius;
+        private float speed;
+        private float rotateSpeed;
+
+        public Mover GetMover => mover;
         private void Awake()
         {
+            stat = GetComponent<Stat>();
             health = GetComponent<Health>();
+            attacker = GetComponent<Attacker>();
             mover = GetComponent<Mover>();
             rotater = GetComponent<Rotater>();
             playerSkills = GetComponent<PlayerSkills>().GetPlayerSkills();
             actionSheduler = GetComponent<ActionScheduler>();
+            speed = stat.MoveSpeed;
+            rotateSpeed = stat.RotateSpeed;
         }
         private void Start()
         {
             if (!photonView.IsMine) this.enabled = false;
         }
-        
-        public Mover GetMover => mover;
-        public Health GetHealth => health;
         public ActionScheduler GetActionScheduler => actionSheduler;
 
         private void Update()
         {
             if (health.IsDead())
             {
+                OnDeath?.Invoke();
                 Function.CursorManager.Instance.SetCursor(CursorType.Default);
                 return;
             }
             UseSkills();
+            if (PlayerDefaultAttack()) return;
+            PlayerMovement();
         }
 
         private void FixedUpdate()
         {
-            PlayerMovement();
+            
         }
         
         private void UseSkills()
@@ -63,13 +73,32 @@ namespace SwordNShield.Controller
             }
         }
 
+        private bool PlayerDefaultAttack()
+        {
+            RaycastHit2D[] hits = Physics2D.RaycastAll(GetMouseRay(), Vector2.zero);
+            foreach (var hit in hits)
+            {
+                if (hit.transform == this.transform) return false;
+                Health target = hit.transform.GetComponent<Health>();
+                if (target == null) continue;
+                if (Input.GetMouseButton(1))
+                {
+                    attacker.StartAttack(target);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         //Player 이동
         private void PlayerMovement()
         {
             if (Input.GetMouseButton(1))
             {
                 Vector2 target = RaycastTarget();
-                rotater.StartRotateAction(target);
+                float angle = rotater.CalculateAngle(target, transform.position);
+                rotater.StartRotateAction(angle, rotateSpeed);
                 mover.StartMoveAction(target, speed);
             }
         }
