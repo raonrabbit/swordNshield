@@ -1,11 +1,12 @@
-using System;
 using System.Collections;
+using Photon.Pun;
 using SwordNShield.Attributes;
+using SwordNShield.Controller;
 using SwordNShield.Function;
 using SwordNShield.Movement;
 using UnityEngine;
 
-public class Attacker : MonoBehaviour, IAction
+public class Attacker : MonoBehaviourPunCallbacks, IAction
 {
     private bool canAttack;
     private bool canMove;
@@ -24,6 +25,7 @@ public class Attacker : MonoBehaviour, IAction
         rotater = GetComponent<Rotater>();
         stat = GetComponent<Stat>();
         canMove = stat.MoveSpeed != 0;
+        canAttack = true;
         actionScheduler = GetComponent<ActionScheduler>();
     }
 
@@ -55,8 +57,9 @@ public class Attacker : MonoBehaviour, IAction
                 rotater.StartRotateAction(angle, stat.RotateSpeed);
                 if (CanAttack)
                 {
-                    animator.SetTrigger("attack");
+                    photonView.RPC("PlayTriggerAnimation", Photon.Pun.RpcTarget.All, "attack");
                     target.GetDamage(gameObject, stat.AttackDamage);
+                    if (target == null || target.IsDead()) Cancel();
                     startTime = Time.time;
                     canAttack = false;
                 }
