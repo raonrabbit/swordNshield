@@ -1,15 +1,15 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;
 using SwordNShield.Stats;
 
 namespace SwordNShield.Attributes
 {
-    public class Health : MonoBehaviour
+    public class Health : MonoBehaviourPunCallbacks
     {
         [SerializeField]private float healthPoints = 200f;
-        [SerializeField] private UnityEvent onDie;
 
-        public float HP() => healthPoints;
+        public float HP => healthPoints;
         public bool IsDead()
         {
             return healthPoints <= 0;
@@ -17,12 +17,17 @@ namespace SwordNShield.Attributes
         
         public void GetDamage(GameObject attacker, float damage)
         {
-            healthPoints -= Mathf.Max(healthPoints - damage, 0);
+            photonView.RPC("PunGetDamage", RpcTarget.All, damage);
             if (IsDead())
             {
-                onDie.Invoke();
                 AwardExperience(attacker);
             }
+        }
+
+        [PunRPC]
+        private void PunGetDamage(float damage)
+        {
+            healthPoints = Mathf.Max(healthPoints - damage, 0);
         }
 
         private void AwardExperience(GameObject attacker)
