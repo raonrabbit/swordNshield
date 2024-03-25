@@ -8,7 +8,7 @@ using SwordNShield.Controller;
 using SwordNShield.UI;
 using UnityEngine.UI;
 
-public class PlayerUI : MonoBehaviour
+public class SkillUI : MonoBehaviour
 {
     private PlayerPhotonController playerPhotonController;
     private PlayerSkills playerSkills;
