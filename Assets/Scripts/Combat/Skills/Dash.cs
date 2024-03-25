@@ -1,7 +1,9 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using Photon.Pun;
 using SwordNShield.Controller;
+using SwordNShield.Movement;
 
 namespace SwordNShield.Combat.Skills
 {
@@ -20,10 +22,11 @@ namespace SwordNShield.Combat.Skills
         private bool isDashing;
         private Vector2 dashDirection;
         private Rigidbody2D rigidbody2D;
-
+        private Mover mover;
         private void Awake()
         {
             rigidbody2D = GetComponent<Rigidbody2D>();
+            mover = GetComponent<Mover>();
         }
 
         public KeyCode GetKeyCode
@@ -41,15 +44,17 @@ namespace SwordNShield.Combat.Skills
         //Dash 실행
         public void Play()
         {
-            StartCoroutine(Execute());
+            if (!canExecute) return;
+            PlaySkill!.Invoke(this, EventArgs.Empty);
+            dashDirection = (Owner.GetMouseRay() - (Vector2)transform.position).normalized;
+            StartCoroutine(ExecuteDash(dashDirection));
+            Owner.photonView.RPC("ExecuteDash", RpcTarget.All, dashDirection);
         }
         
-        public IEnumerator Execute()
+        [PunRPC]
+        public IEnumerator ExecuteDash(Vector2 dashDirection)
         {
-            if (!canExecute) yield break;
-            PlaySkill!.Invoke(this, EventArgs.Empty);
-            Owner.GetMover.CanMove = false;
-            dashDirection = (Owner.GetMouseRay() - (Vector2)transform.position).normalized;
+            mover.CanMove = false;
             float startTime = Time.time;
             canExecute = false;
             isDashing = true;
@@ -59,7 +64,7 @@ namespace SwordNShield.Combat.Skills
                 yield return null;
             }
             rigidbody2D.velocity = Vector2.zero;
-            Owner.GetMover.CanMove = true;
+            mover.CanMove = true;
             isDashing = false;
             yield return new WaitForSeconds(coolTime);
             canExecute = true;
