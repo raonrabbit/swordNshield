@@ -7,6 +7,7 @@ using SwordNShield.Combat;
 using SwordNShield.Movement;
 using SwordNShield.Combat.Skills;
 using SwordNShield.Function;
+using SwordNShield.UI;
 
 namespace SwordNShield.Controller
 {
@@ -18,7 +19,7 @@ namespace SwordNShield.Controller
         private Mover mover;
         private Rotater rotater;
         private List<ISkill> playerSkills;
-        public ActionScheduler actionSheduler;
+        public ActionScheduler actionScheduler;
         static public event Action OnDeath ;
         
         private float raycastRadius;
@@ -34,7 +35,7 @@ namespace SwordNShield.Controller
             mover = GetComponent<Mover>();
             rotater = GetComponent<Rotater>();
             playerSkills = GetComponent<PlayerSkills>().GetPlayerSkills();
-            actionSheduler = GetComponent<ActionScheduler>();
+            actionScheduler = GetComponent<ActionScheduler>();
             speed = stat.MoveSpeed;
             rotateSpeed = stat.RotateSpeed;
         }
@@ -42,14 +43,15 @@ namespace SwordNShield.Controller
         {
             if (!photonView.IsMine) this.enabled = false;
         }
-        public ActionScheduler GetActionScheduler => actionSheduler;
+        public ActionScheduler GetActionScheduler => actionScheduler;
 
         private void Update()
         {
             if (health.IsDead())
             {
                 OnDeath?.Invoke();
-                Function.CursorManager.Instance.SetCursor(CursorType.Default);
+                CursorManager.Instance.SetCursor(CursorType.Default);
+                PhotonNetwork.Destroy(gameObject);
                 return;
             }
             UseSkills();
@@ -75,6 +77,7 @@ namespace SwordNShield.Controller
 
         private bool PlayerDefaultAttack()
         {
+            if (!attacker.CanAttack) return false;
             RaycastHit2D[] hits = Physics2D.RaycastAll(GetMouseRay(), Vector2.zero);
             foreach (var hit in hits)
             {

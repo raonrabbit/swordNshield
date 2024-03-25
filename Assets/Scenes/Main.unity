@@ -3559,7 +3559,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 862959693}
-  - component: {fileID: 862959694}
+  - component: {fileID: 862959695}
   m_Layer: 0
   m_Name: CursorManager
   m_TagString: Untagged
@@ -3582,7 +3582,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 124412682}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &862959694
+--- !u!114 &862959695
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3591,11 +3591,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 862959692}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4efd6706112eb6843b4ca7525e43c968, type: 3}
+  m_Script: {fileID: 11500000, guid: d6c281420f9af684fb14539f33c1d9c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultCursor: {fileID: 2800000, guid: e6de2810b65ee734db73f20cf85f5bad, type: 3}
-  attackCursor: {fileID: 2800000, guid: 99a448fea00284f4aa0f9902e17516ba, type: 3}
+  cursorMappings:
+  - type: 0
+    texture: {fileID: 2800000, guid: e6de2810b65ee734db73f20cf85f5bad, type: 3}
+    hotspot: {x: 0, y: 0}
+  - type: 2
+    texture: {fileID: 2800000, guid: 99a448fea00284f4aa0f9902e17516ba, type: 3}
+    hotspot: {x: 0, y: 0}
 --- !u!1001 &881317163
 PrefabInstance:
   m_ObjectHideFlags: 0
