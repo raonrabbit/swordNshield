@@ -11,7 +11,7 @@ public class HealthBarUI : MonoBehaviour
     [SerializeField] private Vector3 offset;
     [SerializeField] private Health health;
     void Update(){
-        hpBar.value = health.HP();
+        hpBar.value = health.HP;
         hpBar.transform.rotation = Quaternion.identity;
         hpBar.transform.position = mover.transform.position + offset;
         nickName.transform.rotation = Quaternion.identity;
