@@ -7,10 +7,6 @@ using UnityEngine;
 
 public class Attacker : MonoBehaviour, IAction
 {
-    [SerializeField] private float attackRange;
-    [SerializeField] private float attackDamage;
-    [SerializeField] private float attackCoolTime;
-
     private bool canAttack;
     private bool canMove;
     private Animator animator;
@@ -49,18 +45,18 @@ public class Attacker : MonoBehaviour, IAction
         float startTime = Time.time;
         while (true)
         {
-            if (!canAttack && Time.time - startTime >= attackCoolTime)
+            if (!canAttack && Time.time - startTime >= stat.AttackCoolTime)
             {
                 canAttack = true;
             }
-            if (Vector2.Distance(transform.position, target.transform.position) <= attackRange)
+            if (Vector2.Distance(transform.position, target.transform.position) <= stat.AttackRange)
             {
                 float angle = rotater.CalculateAngle(target.transform.position, transform.position);
                 rotater.StartRotateAction(angle, stat.RotateSpeed);
                 if (CanAttack)
                 {
                     animator.SetTrigger("attack");
-                    target.GetDamage(gameObject, attackDamage);
+                    target.GetDamage(gameObject, stat.AttackDamage);
                     startTime = Time.time;
                     canAttack = false;
                 }
