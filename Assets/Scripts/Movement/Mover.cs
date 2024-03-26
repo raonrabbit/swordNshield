@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace SwordNShield.Movement
 {
-    public class Mover : MonoBehaviour, Function.IAction
+    public class Mover : MonoBehaviour, IAction
     {
-        private Rigidbody2D rigidbody2D;
+        private Rigidbody2D rigidBody2D;
         private Animator animator;
         private ActionScheduler actionScheduler;
         private Coroutine MoveTowards = null;
@@ -14,7 +14,7 @@ namespace SwordNShield.Movement
         
         void Awake()
         {
-            rigidbody2D = GetComponent<Rigidbody2D>();
+            rigidBody2D = GetComponent<Rigidbody2D>();
             actionScheduler = GetComponent<ActionScheduler>();
             animator = GetComponent<Animator>();
             canMove = true;
@@ -39,10 +39,10 @@ namespace SwordNShield.Movement
         }
         public IEnumerator MoveTo(Vector2 destination, float speed)
         {
-            while (Vector2.Distance(rigidbody2D.position, destination) > 0.1f)
+            while (Vector2.Distance(rigidBody2D.position, destination) > 0.1f)
             {
-                Vector2 direction = (destination - rigidbody2D.position).normalized;
-                rigidbody2D.velocity = direction * speed;
+                Vector2 direction = (destination - rigidBody2D.position).normalized;
+                rigidBody2D.velocity = direction * speed;
                 yield return null;
             }
             Cancel();
@@ -51,14 +51,14 @@ namespace SwordNShield.Movement
 
         public void Cancel()
         {
-            rigidbody2D.velocity = Vector2.zero;
+            rigidBody2D.velocity = Vector2.zero;
             if (MoveTowards == null) return;
             StopCoroutine(MoveTowards);
         }
 
         private void UpdateAnimation()
         {
-            animator.SetBool("isMoving", rigidbody2D.velocity!=Vector2.zero);
+            animator.SetBool("isMoving", rigidBody2D.velocity!=Vector2.zero);
         }
     }
 }

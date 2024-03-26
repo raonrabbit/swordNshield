@@ -21,11 +21,11 @@ namespace SwordNShield.Combat.Skills
         private bool canExecute = true;
         private bool isDashing;
         private Vector2 dashDirection;
-        private Rigidbody2D rigidbody2D;
+        private Rigidbody2D rigidBody2D;
         private Mover mover;
         private void Awake()
         {
-            rigidbody2D = GetComponent<Rigidbody2D>();
+            rigidBody2D = GetComponent<Rigidbody2D>();
             mover = GetComponent<Mover>();
         }
 
@@ -60,10 +60,10 @@ namespace SwordNShield.Combat.Skills
             isDashing = true;
             while(Time.time - startTime < actionTime){
                 Owner.GetActionScheduler.CancelCurrentAction();
-                rigidbody2D.velocity = dashDirection * dashSpeed;
+                rigidBody2D.velocity = dashDirection * dashSpeed;
                 yield return null;
             }
-            rigidbody2D.velocity = Vector2.zero;
+            rigidBody2D.velocity = Vector2.zero;
             mover.CanMove = true;
             isDashing = false;
             yield return new WaitForSeconds(coolTime);

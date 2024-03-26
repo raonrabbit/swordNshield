@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace SwordNShield.Movement
 {
-    public class Rotater : MonoBehaviour, Function.IAction
+    public class Rotater : MonoBehaviour, IAction
     {
-        private Rigidbody2D rigidbody2D;
+        private Rigidbody2D rigidBody2D;
         private Animator animator;
         private ActionScheduler actionScheduler;
         private Coroutine RotateTowards = null;
@@ -16,7 +16,7 @@ namespace SwordNShield.Movement
         
         void Awake()
         {
-            rigidbody2D = GetComponent<Rigidbody2D>();
+            rigidBody2D = GetComponent<Rigidbody2D>();
             actionScheduler = GetComponent<ActionScheduler>();
             animator = GetComponent<Animator>();
             isRotating = false;
@@ -42,14 +42,14 @@ namespace SwordNShield.Movement
         
         private IEnumerator Look(float angle, float speed){
             //Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            float angleDifference = Mathf.DeltaAngle(rigidbody2D.rotation, angle);
+            float angleDifference = Mathf.DeltaAngle(rigidBody2D.rotation, angle);
             while (Mathf.Abs(angleDifference) > 1.0f)
             {
                 isRotating = true;
-                float newAngle = Mathf.MoveTowardsAngle(rigidbody2D.rotation, angle, speed * Time.deltaTime);
-                rigidbody2D.MoveRotation(newAngle);
+                float newAngle = Mathf.MoveTowardsAngle(rigidBody2D.rotation, angle, speed * Time.deltaTime);
+                rigidBody2D.MoveRotation(newAngle);
 
-                angleDifference = Mathf.DeltaAngle(rigidbody2D.rotation, angle);
+                angleDifference = Mathf.DeltaAngle(rigidBody2D.rotation, angle);
                 yield return null;
             }
 
