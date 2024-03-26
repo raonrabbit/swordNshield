@@ -40,6 +40,7 @@ namespace SwordNShield.Attributes
         private void PunGetDamage(float damage)
         {
             healthPoints = Mathf.Max(healthPoints - damage, 0);
+            DamageTextManager.Instance.GetDamageText(transform.position, damage);
         }
 
         private void AwardExperience(GameObject attacker)
