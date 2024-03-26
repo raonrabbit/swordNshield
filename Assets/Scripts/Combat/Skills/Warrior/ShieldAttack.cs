@@ -8,7 +8,6 @@ using SwordNShield.Controller;
 using SwordNShield.Function;
 using SwordNShield.Movement;
 using UnityEngine;
-using Vector2 = UnityEngine.Vector2;
 
 public class ShieldAttack : MonoBehaviour, ISkill
 {
@@ -23,14 +22,15 @@ public class ShieldAttack : MonoBehaviour, ISkill
     private AnimationScheduler animationScheduler;
     private Rotater rotater;
     private Health health;
+    private Attacker attacker;
     private bool canExecute = true;
     private bool isPlaying;
-    private ISkill _skillImplementation;
 
     void Awake()
     {
         animationScheduler = GetComponent<AnimationScheduler>();
         health = GetComponent<Health>();
+        attacker = GetComponent<Attacker>();
         rotater = GetComponent<Rotater>();
     }
     public KeyCode GetKeyCode
@@ -56,14 +56,16 @@ public class ShieldAttack : MonoBehaviour, ISkill
     [PunRPC]
     public IEnumerator ExecuteShieldAttack()
     {
-        rotater.CanRotate = false;
         animationScheduler.StartAnimation(animationClip);
+        rotater.CanRotate = false;
+        attacker.CanAttack = false;
         canExecute = false;
         isPlaying = true;
         health.CanGetDamage = false;
         yield return new WaitForSeconds(actionTime);
         health.CanGetDamage = true;
         rotater.CanRotate = true;
+        attacker.CanAttack = true;
         yield return new WaitForSeconds(coolTime);
         canExecute = true;
     }
