@@ -1,3 +1,4 @@
+using Photon.Pun;
 using SwordNShield.Controller;
 using UnityEngine;
 
@@ -45,16 +46,13 @@ public class TransparentObj : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        var playerController = other.GetComponent<SwordNShield.Controller.PlayerController>();
-        if (playerController != null)
+        var otherPhotonView = other.GetComponent<PhotonView>();
+        if (otherPhotonView.IsMine)
         {
             ChangeTransparentRate(false);
         }
-        else
-        {
-            var canvasGroup = other.GetComponent<CanvasGroup>();
-            canvasGroup.alpha = 1f;
-        }
+        var canvasGroup = other.GetComponent<CanvasGroup>();
+        if(canvasGroup!=null) canvasGroup.alpha = 1f;
         SpriteRenderer[] spriteRenderers = other.GetComponentsInChildren<SpriteRenderer>();
         foreach (SpriteRenderer spriteRenderer in spriteRenderers)
         {
