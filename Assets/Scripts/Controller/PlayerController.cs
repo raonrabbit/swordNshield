@@ -77,15 +77,15 @@ namespace SwordNShield.Controller
 
         private bool PlayerDefaultAttack()
         {
-            if (!attacker.CanAttack) return false;
-            RaycastHit2D[] hits = Physics2D.RaycastAll(GetMouseRay(), Vector2.zero);
-            foreach (var hit in hits)
+            //if (!attacker.CanAttack) return false;
+            if (Input.GetMouseButton(1))
             {
-                if (hit.transform == this.transform) return false;
-                Health target = hit.transform.GetComponent<Health>();
-                if (target == null) continue;
-                if (Input.GetMouseButton(1))
+                RaycastHit2D[] hits = Physics2D.RaycastAll(GetMouseRay(), Vector2.zero);
+                foreach (var hit in hits)
                 {
+                    if (hit.transform == this.transform) return false;
+                    Health target = hit.transform.GetComponent<Health>();
+                    if (target == null) continue;
                     attacker.StartAttack(target);
                     return true;
                 }
@@ -99,6 +99,7 @@ namespace SwordNShield.Controller
         {
             if (Input.GetMouseButton(1))
             {
+                CursorManager.Instance.SetCursor(CursorType.Default);
                 Vector2 target = RaycastTarget();
                 float angle = rotater.CalculateAngle(target, transform.position);
                 rotater.StartRotateAction(angle, rotateSpeed);
