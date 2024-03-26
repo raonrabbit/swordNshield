@@ -10,18 +10,20 @@ public class Attacker : MonoBehaviourPunCallbacks, IAction
 {
     private bool canAttack;
     private bool canMove;
-    private Animator animator;
-    private Rigidbody2D rigidbody2D;
+    private Rigidbody2D rigidBody2D;
     private Rotater rotater;
     private Stat stat;
     private ActionScheduler actionScheduler;
     private Coroutine AttackCoroutine;
 
-    public bool CanAttack => canAttack;
+    public bool CanAttack
+    {
+        get => canAttack;
+        set => canAttack = value;
+    }
     private void Awake()
     {
-        animator = GetComponent<Animator>();
-        rigidbody2D = GetComponent<Rigidbody2D>();
+        rigidBody2D = GetComponent<Rigidbody2D>();
         rotater = GetComponent<Rotater>();
         stat = GetComponent<Stat>();
         canMove = stat.MoveSpeed != 0;
@@ -31,6 +33,7 @@ public class Attacker : MonoBehaviourPunCallbacks, IAction
 
     public void StartAttack(Health target)
     {
+        if (!canAttack) return;
         if(AttackCoroutine!=null) Cancel();
         actionScheduler.StartAction(this);
         AttackCoroutine = StartCoroutine(Attack(target));
@@ -39,30 +42,22 @@ public class Attacker : MonoBehaviourPunCallbacks, IAction
     public void Cancel()
     {
         if(AttackCoroutine != null) StopCoroutine(AttackCoroutine);
-        canAttack = true;
     }
 
     private IEnumerator Attack(Health target)
     {
-        canAttack = true;
-        float startTime = Time.time;
         while (true)
         {
-            if (!canAttack && Time.time - startTime >= stat.AttackCoolTime)
-            {
-                canAttack = true;
-            }
             if (Vector2.Distance(transform.position, target.transform.position) <= stat.AttackRange)
             {
                 float angle = rotater.CalculateAngle(target.transform.position, transform.position);
                 rotater.StartRotateAction(angle, stat.RotateSpeed);
-                if (CanAttack)
+                if (canAttack)
                 {
                     photonView.RPC("PlayTriggerAnimation", RpcTarget.All, "attack");
                     target.GetDamage(gameObject, stat.AttackDamage);
                     if (target == null || target.IsDead()) Cancel();
-                    startTime = Time.time;
-                    canAttack = false;
+                    StartCoroutine(AttackDelay());
                 }
             }
             else
@@ -71,11 +66,18 @@ public class Attacker : MonoBehaviourPunCallbacks, IAction
                 {
                     float angle = rotater.CalculateAngle(target.transform.position, transform.position);
                     rotater.StartRotateAction(angle, stat.RotateSpeed);
-                    Vector2 direction = ((Vector2)target.transform.position - rigidbody2D.position).normalized;
-                    rigidbody2D.velocity = direction * stat.MoveSpeed;
+                    Vector2 direction = ((Vector2)target.transform.position - rigidBody2D.position).normalized;
+                    rigidBody2D.velocity = direction * stat.MoveSpeed;
                 }
             }
             yield return null;
         }
+    }
+
+    private IEnumerator AttackDelay()
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(stat.AttackCoolTime);
+        canAttack = true;
     }
 }
