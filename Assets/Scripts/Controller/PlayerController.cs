@@ -20,6 +20,7 @@ namespace SwordNShield.Controller
         private Rotater rotater;
         private List<ISkill> playerSkills;
         public ActionScheduler actionScheduler;
+        private SkillScheduler skillScheduler;
         static public event Action OnDeath ;
         
         private float raycastRadius;
@@ -36,6 +37,7 @@ namespace SwordNShield.Controller
             rotater = GetComponent<Rotater>();
             playerSkills = GetComponent<PlayerSkills>().GetPlayerSkills();
             actionScheduler = GetComponent<ActionScheduler>();
+            skillScheduler = GetComponent<SkillScheduler>();
             speed = stat.MoveSpeed;
             rotateSpeed = stat.RotateSpeed;
         }
@@ -70,7 +72,7 @@ namespace SwordNShield.Controller
             {
                 if (Input.GetKeyDown(skill.GetKeyCode))
                 {
-                    skill.Play();
+                    skillScheduler.StartSkill(skill);
                 }
             }
         }
