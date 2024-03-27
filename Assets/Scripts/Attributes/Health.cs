@@ -8,6 +8,8 @@ namespace SwordNShield.Attributes
     public class Health : MonoBehaviourPunCallbacks
     {
         [SerializeField]private float healthPoints = 200f;
+        public delegate void DamageReceived(GameObject attacker, float damage);
+        public event DamageReceived OnDamageReceived;
         private bool canGetDamage;
         public float HP => healthPoints;
 
@@ -28,7 +30,11 @@ namespace SwordNShield.Attributes
         
         public void GetDamage(GameObject attacker, float damage)
         {
-            if (!canGetDamage) return;
+            if (!canGetDamage)
+            {
+                OnDamageReceived?.Invoke(attacker, damage);
+                return;
+            }
             photonView.RPC("PunGetDamage", RpcTarget.All, damage);
             if (IsDead())
             {
@@ -43,7 +49,7 @@ namespace SwordNShield.Attributes
             DamageTextManager.Instance.GetDamageText(transform.position, damage);
         }
 
-        private void AwardExperience(GameObject attacker)
+        public void AwardExperience(GameObject attacker)
         {
             Experience experience = attacker.GetComponent<Experience>();
             if (experience == null) return;
