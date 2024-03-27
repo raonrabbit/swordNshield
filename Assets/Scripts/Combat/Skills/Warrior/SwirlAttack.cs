@@ -43,12 +43,13 @@ namespace SwordNShield.Combat.Skills
     }
     
     public Sprite SkillSprite => skillImage;
+    public GameObject Indicator => null;
     public bool CanExecute => canExecute;
     public bool IsPlaying => isPlaying;
     public float CoolTime => coolTime;
     public float ActionTime => actionTime;
     
-    public void Play()
+    public void Play(Vector2? _)
     {
         if (!canExecute) return;
         PlaySkill!.Invoke(this, EventArgs.Empty);
@@ -70,6 +71,7 @@ namespace SwordNShield.Combat.Skills
             if(photonView.IsMine) GiveDamage();
             yield return new WaitForSeconds(timeBetweenDamages);
         }
+        isPlaying = false;
         rotater.CanRotate = true;
         attacker.CanAttack = true;
         yield return new WaitForSeconds(coolTime);

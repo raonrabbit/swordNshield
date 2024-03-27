@@ -13,6 +13,7 @@ namespace SwordNShield.Combat.Skills
         
         public event EventHandler PlaySkill;
         [SerializeField] private Sprite skillImage;
+        [SerializeField] private GameObject indicator;
         [SerializeField] private KeyCode keyCode = KeyCode.F;
         [SerializeField] private float coolTime = 3f;
         [SerializeField] private float actionTime = 0.5f;
@@ -36,13 +37,14 @@ namespace SwordNShield.Combat.Skills
         }
 
         public Sprite SkillSprite => skillImage;
+        public GameObject Indicator => indicator;
         public bool CanExecute => canExecute;
         public bool IsPlaying => isDashing;
         public float CoolTime => coolTime;
         public float ActionTime => actionTime;
 
         //Dash 실행
-        public void Play()
+        public void Play(Vector2? _)
         {
             if (!canExecute) return;
             PlaySkill!.Invoke(this, EventArgs.Empty);
