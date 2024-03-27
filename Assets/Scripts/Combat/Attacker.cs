@@ -48,6 +48,7 @@ public class Attacker : MonoBehaviourPunCallbacks, IAction
     {
         while (true)
         {
+            if (target == null) Cancel();
             if (Vector2.Distance(transform.position, target.transform.position) <= stat.AttackRange)
             {
                 float angle = rotater.CalculateAngle(target.transform.position, transform.position);
