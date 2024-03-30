@@ -1,20 +1,24 @@
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.Events;
 using SwordNShield.Stats;
 
 namespace SwordNShield.Attributes
 {
     public class Health : MonoBehaviourPunCallbacks
     {
-        [SerializeField]private float healthPoints = 200f;
+        [SerializeField] private Stat stat;
+        private float healthPoints;
+        private float maxHP;
         public delegate void DamageReceived(GameObject attacker, float damage);
         public event DamageReceived OnDamageReceived;
         private bool canGetDamage;
         public float HP => healthPoints;
+        public float MaxHP => maxHP;
 
         private void Awake()
         {
+            maxHP = stat.HP;
+            healthPoints = maxHP;
             canGetDamage = true;
         }
 
