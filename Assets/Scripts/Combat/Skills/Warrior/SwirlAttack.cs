@@ -21,6 +21,7 @@ namespace SwordNShield.Combat.Skills
     [SerializeField] private float timeBetweenDamages;
     [SerializeField] private float damagePerTime;
     [SerializeField] private float damageRange;
+    [SerializeField] private GameObject swordTrail;
     
     private AnimationScheduler animationScheduler;
     private Rotater rotater;
@@ -33,6 +34,7 @@ namespace SwordNShield.Combat.Skills
         animationScheduler = GetComponent<AnimationScheduler>();
         rotater = GetComponent<Rotater>();
         attacker = GetComponent<Attacker>();
+        if (swordTrail != null) swordTrail.SetActive(false);
         canExecute = true;
     }
 
@@ -65,6 +67,7 @@ namespace SwordNShield.Combat.Skills
         animationScheduler.StartAnimation(animationClip);
         canExecute = false;
         isPlaying = true;
+        swordTrail.SetActive(true);
         float startTime = Time.time;
         while (Time.time - startTime <= actionTime)
         {
@@ -74,6 +77,7 @@ namespace SwordNShield.Combat.Skills
         isPlaying = false;
         rotater.CanRotate = true;
         attacker.CanAttack = true;
+        swordTrail.SetActive(false);
         yield return new WaitForSeconds(coolTime);
         canExecute = true;
     }
