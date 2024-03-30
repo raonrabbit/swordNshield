@@ -1,34 +1,40 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class ShieldAreaEffect : MonoBehaviour
+namespace SwordNShield.UI
 {
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    private Color targetColor;
-    private Color originalColor;
-    private Vector3 originalScale;
-    private Sequence sequence;
-    void Awake()
+    public class ShieldAreaEffect : MonoBehaviour
     {
-        originalColor = spriteRenderer.color;
-        spriteRenderer.color = originalColor;
-        targetColor.a = 0.1f;
-        originalScale = transform.localScale;
-    }
-    void OnEnable()
-    {
-        transform.localScale = originalScale;
-        spriteRenderer.color = originalColor;
-        Vector3 targetScale = originalScale * 0.95f;
-        sequence = DOTween.Sequence();
-        sequence.Append(transform.DOScale(targetScale, 0.5f).SetEase(Ease.InOutSine));
-        sequence.Join(DOTween.To(() => spriteRenderer.color, x => spriteRenderer.color = x, targetColor, 0.5f)
-            .SetEase(Ease.InOutSine));
-        sequence.SetLoops(-1, LoopType.Yoyo);
-    }
+        [SerializeField] private SpriteRenderer spriteRenderer;
+        private Color targetColor;
+        private Color originalColor;
+        private Vector3 originalScale;
+        private Sequence sequence;
 
-    void OnDisable()
-    {
-        sequence?.Kill();
+        void Awake()
+        {
+            originalColor = spriteRenderer.color;
+            spriteRenderer.color = originalColor;
+            targetColor.a = 0.1f;
+            originalScale = transform.localScale;
+        }
+
+        void OnEnable()
+        {
+            transform.localScale = originalScale;
+            spriteRenderer.color = originalColor;
+            Vector3 targetScale = originalScale * 0.95f;
+            sequence = DOTween.Sequence();
+            sequence.Append(transform.DOScale(targetScale, 0.5f).SetEase(Ease.InOutSine));
+            sequence.Join(DOTween.To(() => spriteRenderer.color, x => spriteRenderer.color = x, targetColor, 0.5f)
+                .SetEase(Ease.InOutSine));
+            sequence.SetLoops(-1, LoopType.Yoyo);
+        }
+
+        void OnDisable()
+        {
+            sequence?.Kill();
+        }
     }
 }
+
