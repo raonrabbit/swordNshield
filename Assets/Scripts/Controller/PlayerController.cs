@@ -79,7 +79,6 @@ namespace SwordNShield.Controller
 
         private bool PlayerDefaultAttack()
         {
-            //if (!attacker.CanAttack) return false;
             if (Input.GetMouseButton(1))
             {
                 RaycastHit2D[] hits = Physics2D.RaycastAll(GetMouseRay(), Vector2.zero);
