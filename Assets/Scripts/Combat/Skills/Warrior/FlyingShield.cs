@@ -2,6 +2,7 @@ using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 using SwordNShield.Attributes;
+using SwordNShield.Function;
 
 namespace SwordNShield.Combat
 {
@@ -45,9 +46,11 @@ namespace SwordNShield.Combat
             if (isMine) return;
             if (other.transform == owner.transform) return;
             Health health = other.GetComponent<Health>();
+            StateScheduler stateScheduler = other.GetComponent<StateScheduler>();
             if (health != null)
             {
                 health.GetDamage(owner, damage);
+                stateScheduler.StartState(StateType.Stun, 0, 3f);
             }
         }
     }
