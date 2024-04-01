@@ -46,9 +46,8 @@ public class Attacker : MonoBehaviourPunCallbacks, IAction
 
     private IEnumerator Attack(Health target)
     {
-        while (true)
+        while (target != null)
         {
-            if (target == null) Cancel();
             if (Vector2.Distance(transform.position, target.transform.position) <= stat.AttackRange)
             {
                 float angle = rotater.CalculateAngle(target.transform.position, transform.position);
@@ -56,8 +55,8 @@ public class Attacker : MonoBehaviourPunCallbacks, IAction
                 if (canAttack)
                 {
                     photonView.RPC("PlayTriggerAnimation", RpcTarget.All, "attack");
-                    target.GetDamage(gameObject, stat.AttackDamage);
                     if (target == null || target.IsDead()) Cancel();
+                    target.GetDamage(gameObject, stat.AttackDamage);
                     StartCoroutine(AttackDelay());
                 }
             }
