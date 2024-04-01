@@ -71,6 +71,7 @@ namespace SwordNShield.Combat.Skills
         float startTime = Time.time;
         while (Time.time - startTime <= actionTime)
         {
+            if (this == null) yield break;
             if(photonView.IsMine) GiveDamage();
             yield return new WaitForSeconds(timeBetweenDamages);
         }
