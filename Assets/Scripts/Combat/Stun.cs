@@ -44,6 +44,7 @@ namespace SwordNShield.Combat
                 rigidBody2D.mass = 10000;
                 mover.CanMove = false;
                 rotater.CanRotate = false;
+                attacker.Cancel();
                 attacker.CanAttack = false;
                 actionScheduler.CanAction = false;
                 skillScheduler.CanUseSkill = false;
