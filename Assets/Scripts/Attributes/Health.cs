@@ -12,6 +12,7 @@ namespace SwordNShield.Attributes
         public delegate void DamageReceived(GameObject attacker, float damage);
         public event DamageReceived OnDamageReceived;
         private bool canGetDamage;
+        private bool isDead;
         public float HP => healthPoints;
         public float MaxHP => maxHP;
 
@@ -34,6 +35,7 @@ namespace SwordNShield.Attributes
         
         public void GetDamage(GameObject attacker, float damage)
         {
+            if (isDead) return;
             if (!canGetDamage)
             {
                 OnDamageReceived?.Invoke(attacker, damage);
@@ -42,6 +44,10 @@ namespace SwordNShield.Attributes
             photonView.RPC("PunGetDamage", RpcTarget.All, damage);
             if (IsDead())
             {
+                isDead = true;
+                PhotonView attackerPhotonView = attacker.GetComponent<PhotonView>();
+                if (attackerPhotonView == null) return;
+                KillScoreManager.Instance.photonView.RPC("KillPlayer", RpcTarget.All, attackerPhotonView.Owner);
                 AwardExperience(attacker);
             }
         }
