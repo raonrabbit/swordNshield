@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SwordNShield.Function
 {
-    public class AnimationScheduler : MonoBehaviourPunCallbacks
+    public class AnimationController : MonoBehaviourPunCallbacks
     {
         private Animator animator;
 

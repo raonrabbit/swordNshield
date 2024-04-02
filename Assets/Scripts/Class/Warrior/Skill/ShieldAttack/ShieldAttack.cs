@@ -27,7 +27,7 @@ public class ShieldAttack : MonoBehaviourPunCallbacks, ISkill
     [SerializeField] private float distance;
     [SerializeField] private float duration;
 
-    private AnimationScheduler animationScheduler;
+    private AnimationController animationController;
     private Rotater rotater;
     private Health health;
     private Attacker attacker;
@@ -36,7 +36,7 @@ public class ShieldAttack : MonoBehaviourPunCallbacks, ISkill
 
     void Awake()
     {
-        animationScheduler = GetComponent<AnimationScheduler>();
+        animationController = GetComponent<AnimationController>();
         health = GetComponent<Health>();
         attacker = GetComponent<Attacker>();
         rotater = GetComponent<Rotater>();
@@ -70,7 +70,7 @@ public class ShieldAttack : MonoBehaviourPunCallbacks, ISkill
     [PunRPC]
     public IEnumerator ExecuteShieldAttack(float angle)
     {
-        animationScheduler.StartAnimation(animationClip);
+        animationController.StartAnimation(animationClip);
         rotater.CanRotate = false;
         attacker.CanAttack = false;
         canExecute = false;

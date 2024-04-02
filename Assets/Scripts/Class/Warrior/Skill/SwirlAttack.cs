@@ -23,7 +23,7 @@ namespace SwordNShield.Combat.Skills
     [SerializeField] private float damageRange;
     [SerializeField] private GameObject swordTrail;
     
-    private AnimationScheduler animationScheduler;
+    private AnimationController animationController;
     private Rotater rotater;
     private Attacker attacker;
     private bool canExecute;
@@ -31,7 +31,7 @@ namespace SwordNShield.Combat.Skills
 
     void Awake()
     { 
-        animationScheduler = GetComponent<AnimationScheduler>();
+        animationController = GetComponent<AnimationController>();
         rotater = GetComponent<Rotater>();
         attacker = GetComponent<Attacker>();
         if (swordTrail != null) swordTrail.SetActive(false);
@@ -64,7 +64,7 @@ namespace SwordNShield.Combat.Skills
     {
         rotater.CanRotate = false;
         attacker.CanAttack = false;
-        animationScheduler.StartAnimation(animationClip);
+        animationController.StartAnimation(animationClip);
         canExecute = false;
         isPlaying = true;
         swordTrail.SetActive(true);
