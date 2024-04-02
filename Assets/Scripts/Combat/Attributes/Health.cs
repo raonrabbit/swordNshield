@@ -1,8 +1,10 @@
 using Photon.Pun;
+using SwordNShield.Manager;
 using UnityEngine;
 using SwordNShield.Stats;
+using SwordNShield.UI;
 
-namespace SwordNShield.Attributes
+namespace SwordNShield.Combat.Attributes
 {
     public class Health : MonoBehaviourPunCallbacks
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SwordNShield.Function
+namespace SwordNShield.Combat.Actions
 {
     public class ActionScheduler : MonoBehaviour
     {

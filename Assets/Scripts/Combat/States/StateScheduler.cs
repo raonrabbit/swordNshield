@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Photon.Pun;
-using SwordNShield.Combat;
-using UnityEngine;
 
-namespace SwordNShield.Function
+namespace SwordNShield.Combat.States
 {
     public class StateScheduler : MonoBehaviourPunCallbacks
     {

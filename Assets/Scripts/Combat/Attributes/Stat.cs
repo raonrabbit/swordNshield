@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SwordNShield.Attributes
+namespace SwordNShield.Combat.Attributes
 {
     public class Stat : MonoBehaviour
     {

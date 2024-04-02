@@ -1,7 +1,8 @@
-using SwordNShield.Combat;
-
-public interface IState
+namespace SwordNShield.Combat.States
 {
-    StateType Type { get; }
-    void SetState(float rate, float time);
+    public interface IState
+    {
+        StateType Type { get; }
+        void SetState(float rate, float time);
+    }
 }

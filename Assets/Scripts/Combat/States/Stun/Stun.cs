@@ -1,9 +1,9 @@
 using System.Collections;
-using SwordNShield.Function;
-using SwordNShield.Movement;
+using SwordNShield.Combat.Actions;
+using SwordNShield.Combat.Skills;
 using UnityEngine;
 
-namespace SwordNShield.Combat
+namespace SwordNShield.Combat.States
 {
     public class Stun : MonoBehaviour, IState
     {

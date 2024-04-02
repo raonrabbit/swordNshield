@@ -1,59 +1,62 @@
-using SwordNShield.Combat;
 using UnityEngine;
 
-public class IndicatorManager : MonoBehaviour
+namespace SwordNShield.Combat.Skills
 {
-    private ISkill currentSkill;
-    private Vector2 mousePosition;
-
-    void Update()
+    public class IndicatorManager : MonoBehaviour
     {
-        if (currentSkill != null)
+        private ISkill currentSkill;
+        private Vector2 mousePosition;
+
+        void Update()
         {
-            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (Input.GetKeyUp(currentSkill.GetKeyCode))
+            if (currentSkill != null)
+            {
+                mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                if (Input.GetKeyUp(currentSkill.GetKeyCode))
+                {
+                    currentSkill.Indicator.SetActive(false);
+                    currentSkill.Play(mousePosition);
+                    currentSkill = null;
+                }
+
+                if (Input.GetMouseButton(1))
+                {
+                    currentSkill?.Indicator.SetActive(false);
+                    currentSkill = null;
+                }
+                else RotateIndicatorToMousePosition();
+            }
+        }
+
+        public void ActivateIndicator(ISkill skill)
+        {
+            if (!skill.CanExecute) return;
+            if (currentSkill != null)
             {
                 currentSkill.Indicator.SetActive(false);
-                currentSkill.Play(mousePosition);
-                currentSkill = null;
             }
-            if (Input.GetMouseButton(1))
+
+            currentSkill = skill;
+            currentSkill.Indicator.SetActive(false);
+            currentSkill = skill;
+            currentSkill.Indicator.SetActive(true);
+        }
+
+        public void DeActivateIndicator()
+        {
+            if (currentSkill != null)
             {
-                currentSkill?.Indicator.SetActive(false);
+                currentSkill.Indicator.SetActive(false);
                 currentSkill = null;
             }
-            else RotateIndicatorToMousePosition();
         }
-    }
 
-    public void ActivateIndicator(ISkill skill)
-    {
-        if (!skill.CanExecute) return;
-        if (currentSkill != null)
+        void RotateIndicatorToMousePosition()
         {
-            currentSkill.Indicator.SetActive(false);
+            if (currentSkill == null) return;
+            Vector2 direction = mousePosition - (Vector2)transform.position;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         }
-
-        currentSkill = skill;
-        currentSkill.Indicator.SetActive(false);
-        currentSkill = skill;
-        currentSkill.Indicator.SetActive(true);
-    }
-
-    public void DeActivateIndicator()
-    {
-        if (currentSkill != null)
-        {
-            currentSkill.Indicator.SetActive(false);
-            currentSkill = null;
-        }
-    }
-
-    void RotateIndicatorToMousePosition()
-    {
-        if (currentSkill == null) return;
-        Vector2 direction = mousePosition - (Vector2)transform.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
 }

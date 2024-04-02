@@ -1,12 +1,10 @@
 ﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using Photon.Pun;
-using UnityEngine;
-using SwordNShield.Attributes;
-using SwordNShield.Combat;
-using SwordNShield.Movement;
+using SwordNShield.Combat.Actions;
+using SwordNShield.Combat.Attributes;
 using SwordNShield.Combat.Skills;
-using SwordNShield.Function;
 using SwordNShield.UI;
 
 namespace SwordNShield.Controller

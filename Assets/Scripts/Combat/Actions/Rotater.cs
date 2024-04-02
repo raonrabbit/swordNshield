@@ -1,9 +1,7 @@
 using System.Collections;
-using SwordNShield.Combat;
-using SwordNShield.Function;
 using UnityEngine;
 
-namespace SwordNShield.Movement
+namespace SwordNShield.Combat.Actions
 {
     public class Rotater : MonoBehaviour, IAction
     {

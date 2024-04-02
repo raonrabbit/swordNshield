@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SwordNShield.Combat
+namespace SwordNShield.Combat.Skills
 {
     public interface ISkill
     {

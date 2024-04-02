@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using Photon.Pun;
-using SwordNShield.Attributes;
-using SwordNShield.Controller;
-using SwordNShield.Function;
-using SwordNShield.Movement;
 using UnityEngine;
+using SwordNShield.Combat.Actions;
+using SwordNShield.Combat.Attributes;
+using SwordNShield.Combat.Skills;
+using SwordNShield.Controller;
 
-namespace SwordNShield.Combat.Skills
+namespace SwordNShield.Class.Warrior
 {
  public class SwirlAttack : MonoBehaviourPunCallbacks, ISkill
 {

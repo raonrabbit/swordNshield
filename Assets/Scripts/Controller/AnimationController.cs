@@ -1,7 +1,7 @@
 using Photon.Pun;
 using UnityEngine;
 
-namespace SwordNShield.Function
+namespace SwordNShield.Controller
 {
     public class AnimationController : MonoBehaviourPunCallbacks
     {

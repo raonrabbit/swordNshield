@@ -1,4 +1,4 @@
-namespace SwordNShield.Function
+namespace SwordNShield.Combat.Actions
 {
     public interface IAction
     {

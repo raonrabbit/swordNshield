@@ -1,4 +1,4 @@
-namespace SwordNShield.Combat
+namespace SwordNShield.Combat.States
 {
     public enum StateType
     {

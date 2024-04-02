@@ -1,7 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-namespace SwordNShield.UI
+namespace SwordNShield.Combat.States
 {
     public class StunEffect : MonoBehaviour
     {

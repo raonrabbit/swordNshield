@@ -1,8 +1,7 @@
 using System.Collections;
-using SwordNShield.Function;
 using UnityEngine;
 
-namespace SwordNShield.Movement
+namespace SwordNShield.Combat.Actions
 {
     public class Mover : MonoBehaviour, IAction
     {

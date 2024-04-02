@@ -1,6 +1,6 @@
 using Photon.Pun;
-using SwordNShield.Attributes;
-using SwordNShield.Movement;
+using SwordNShield.Combat.Actions;
+using SwordNShield.Combat.Attributes;
 using UnityEngine;
 
 namespace SwordNShield.Controller

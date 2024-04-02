@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SwordNShield.Combat;
 using SwordNShield.Combat.Skills;
 using SwordNShield.Controller;
 using UnityEngine.UI;

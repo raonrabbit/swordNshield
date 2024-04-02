@@ -1,10 +1,10 @@
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
-using SwordNShield.Attributes;
-using SwordNShield.Function;
+using SwordNShield.Combat.Attributes;
+using SwordNShield.Combat.States;
 
-namespace SwordNShield.Combat
+namespace SwordNShield.Class.Warrior
 {
     public class FlyingShield : MonoBehaviourPunCallbacks
     {

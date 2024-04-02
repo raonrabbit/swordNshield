@@ -2,13 +2,16 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NickNameUI : MonoBehaviourPunCallbacks
+namespace SwordNShield.UI
 {
-    [SerializeField]private Text nickName;
-
-    void Awake()
+    public class NickNameUI : MonoBehaviourPunCallbacks
     {
-        nickName.text = photonView.IsMine ? PhotonNetwork.NickName : photonView.Owner.NickName;
-        nickName.color = photonView.IsMine ? Color.green : Color.red;
+        [SerializeField] private Text nickName;
+
+        void Awake()
+        {
+            nickName.text = photonView.IsMine ? PhotonNetwork.NickName : photonView.Owner.NickName;
+            nickName.color = photonView.IsMine ? Color.green : Color.red;
+        }
     }
 }

@@ -2,8 +2,8 @@ using System;
 using UnityEngine;
 using System.Collections;
 using Photon.Pun;
+using SwordNShield.Combat.Actions;
 using SwordNShield.Controller;
-using SwordNShield.Movement;
 
 namespace SwordNShield.Combat.Skills
 {
