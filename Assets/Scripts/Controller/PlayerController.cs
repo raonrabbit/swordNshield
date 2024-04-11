@@ -11,14 +11,14 @@ namespace SwordNShield.Controller
 {
     public class PlayerController : MonoBehaviourPunCallbacks
     {
+        [SerializeField] private SkillScheduler skillScheduler;
+        [SerializeField] private ActionScheduler actionScheduler;
         private Stat stat;
         private Health health;
         private Attacker attacker;
         private Mover mover;
         private Rotater rotater;
-        private List<ISkill> playerSkills;
-        public ActionScheduler actionScheduler;
-        private SkillScheduler skillScheduler;
+        private List<Skill> playerSkills;
         static public event Action OnDeath ;
         
         private float raycastRadius;
@@ -33,9 +33,8 @@ namespace SwordNShield.Controller
             attacker = GetComponent<Attacker>();
             mover = GetComponent<Mover>();
             rotater = GetComponent<Rotater>();
-            playerSkills = GetComponent<PlayerSkills>().GetPlayerSkills();
             actionScheduler = GetComponent<ActionScheduler>();
-            skillScheduler = GetComponent<SkillScheduler>();
+            playerSkills = skillScheduler.GetPlayerSkills();
             speed = stat.MoveSpeed;
             rotateSpeed = stat.RotateSpeed;
         }
@@ -66,11 +65,11 @@ namespace SwordNShield.Controller
         
         private void UseSkills()
         {
-            foreach (ISkill skill in playerSkills)
+            foreach (Skill skill in playerSkills)
             {
                 if (Input.GetKeyDown(skill.GetKeyCode))
                 {
-                    skillScheduler.StartSkill(skill);
+                    StartCoroutine(skillScheduler.StartSkill(skill));
                 }
             }
         }

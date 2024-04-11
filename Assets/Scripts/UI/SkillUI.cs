@@ -1,37 +1,35 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using SwordNShield.Combat.Skills;
-using SwordNShield.Controller;
 using UnityEngine.UI;
 
 namespace SwordNShield.UI
 {
     public class SkillUI : MonoBehaviour
     {
-        private PlayerPhotonController playerPhotonController;
-        private PlayerSkills playerSkills;
-        private List<ISkill> playerSkillList;
-        private Dictionary<KeyCode, ISkill> skillsByKeyCode;
+        [SerializeField] private PhotonView photonView;
+        [SerializeField] private SkillScheduler skillScheduler;
+        private List<Skill> playerSkillList;
+        private Dictionary<KeyCode, Skill> skillsByKeyCode;
         private Dictionary<KeyCode, Image> skillImages;
         
         private void Awake()
         {
-            playerPhotonController = GetComponent<PlayerPhotonController>();
-            if (!playerPhotonController.photonView.IsMine)
+            if (!photonView.IsMine)
             {
                 this.enabled = false;
                 return;
             }
-            playerSkills = GetComponent<PlayerSkills>();
-            playerSkillList = playerSkills.GetPlayerSkills();
+            playerSkillList = skillScheduler.GetPlayerSkills();
             SetSkill();
         }
         
         private void SetSkill()
         {
-            skillsByKeyCode = new Dictionary<KeyCode, ISkill>();
+            skillsByKeyCode = new Dictionary<KeyCode, Skill>();
             skillImages = new Dictionary<KeyCode, Image>
             {
                 { KeyCode.Q, CoolTimeUI.Instance.QSkillImage },
@@ -63,7 +61,7 @@ namespace SwordNShield.UI
 
         private void OnSkillUse(object sender, EventArgs e)
         {
-            if (sender is ISkill skill && skillImages.ContainsKey(skill.GetKeyCode))
+            if (sender is Skill skill && skillImages.ContainsKey(skill.GetKeyCode))
             {
                 StartCoroutine(CoolDownImage(skillImages[skill.GetKeyCode], skill.ActionTime, skill.CoolTime));
             }
