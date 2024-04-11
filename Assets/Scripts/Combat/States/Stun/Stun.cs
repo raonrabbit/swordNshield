@@ -8,25 +8,16 @@ namespace SwordNShield.Combat.States
     public class Stun : MonoBehaviour, IState
     {
         private StateType stateType = StateType.Stun;
-        private Mover mover;
-        private Rotater rotater;
-        private Attacker attacker;
-        private ActionScheduler actionScheduler;
-        private SkillScheduler skillScheduler;
-        private Rigidbody2D rigidBody2D;
+        [SerializeField] private Mover mover;
+        [SerializeField] private Rotater rotater;
+        [SerializeField] private Attacker attacker;
+        [SerializeField] private ActionScheduler actionScheduler;
+        [SerializeField] private SkillScheduler skillScheduler;
+        [SerializeField] private Rigidbody2D rigidBody2D;
         [SerializeField]private GameObject stunEffect;
 
         public StateType Type => stateType;
-        void Awake()
-        {
-            mover = GetComponent<Mover>();
-            rotater = GetComponent<Rotater>();
-            attacker = GetComponent<Attacker>();
-            actionScheduler = GetComponent<ActionScheduler>();
-            skillScheduler = GetComponent<SkillScheduler>();
-            rigidBody2D = GetComponent<Rigidbody2D>();
-        }
-
+        
         public void SetState(float rate, float time)
         {
             StartCoroutine(Execute(time));
