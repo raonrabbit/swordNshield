@@ -9,6 +9,7 @@ namespace SwordNShield.UI
         public Image QSkillImage;
         public Image WSkillImage;
         public Image ESkillImage;
+        public Image RSkillImage;
         public Image DSkillImage;
         public Image FSkillImage;
 

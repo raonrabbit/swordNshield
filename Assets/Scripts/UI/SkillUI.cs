@@ -35,6 +35,7 @@ namespace SwordNShield.UI
                 { KeyCode.Q, CoolTimeUI.Instance.QSkillImage },
                 { KeyCode.W, CoolTimeUI.Instance.WSkillImage },
                 { KeyCode.E, CoolTimeUI.Instance.ESkillImage },
+                { KeyCode.R, CoolTimeUI.Instance.RSkillImage },
                 { KeyCode.D, CoolTimeUI.Instance.DSkillImage },
                 { KeyCode.F, CoolTimeUI.Instance.FSkillImage }
             };
