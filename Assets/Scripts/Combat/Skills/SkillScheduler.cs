@@ -27,7 +27,6 @@ namespace SwordNShield.Combat.Skills
             canUseSkill = true;
             foreach (var skill in playerSkills)
             {
-                Debug.Log(skill);
                 skill.Owner = playerController;
                 skills.Add(skill.gameObject.name, skill);
             }
