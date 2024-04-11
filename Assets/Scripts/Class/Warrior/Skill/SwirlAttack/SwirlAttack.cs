@@ -52,6 +52,7 @@ namespace SwordNShield.Class.Warrior
             if(photonView.IsMine) GiveDamage();
             yield return new WaitForSeconds(timeBetweenDamages);
         }
+        animationController.StopAnimation();
         isPlaying = false;
         rotater.CanRotate = true;
         attacker.CanAttack = true;

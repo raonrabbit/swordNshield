@@ -15,6 +15,11 @@ namespace SwordNShield.Controller
         {
             animator.Play(clip.name, -1, 0f);
         }
+
+        public void StopAnimation()
+        {
+            animator.Play("Idle", -1, 0f);
+        }
         
         
         [PunRPC]
