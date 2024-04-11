@@ -8,16 +8,14 @@ namespace SwordNShield.Class.Warrior
 {
     public class FlyingShield : MonoBehaviourPunCallbacks
     {
-        private GameObject owner;
+        public PhotonView owner;
         private float damage;
-        private PhotonView pv;
         private bool isMine;
 
-        public void Play(GameObject attacker, float distance, float duration, float damage)
+        public void Play(PhotonView attacker, float distance, float duration, float damage)
         {
             owner = attacker;
-            pv = owner.GetComponent<PhotonView>();
-            if (pv != null) isMine = pv.IsMine;
+            isMine = owner.IsMine;
             this.damage = damage;
             StartCoroutine(Execute(distance, duration));
         }
@@ -46,12 +44,9 @@ namespace SwordNShield.Class.Warrior
             if (isMine) return;
             if (other.transform == owner.transform) return;
             Health health = other.GetComponent<Health>();
-            StateScheduler stateScheduler = other.GetComponent<StateScheduler>();
-            if (health != null)
-            {
-                health.GetDamage(owner, damage);
-                stateScheduler.StartState(StateType.Stun, 0, 3f);
-            }
+            StateScheduler stateScheduler = other.GetComponentInChildren<StateScheduler>();
+            if (health != null) health.GetDamage(owner.gameObject, damage);
+            if(stateScheduler != null) stateScheduler.StartState(StateType.Stun, 0, 3f);
         }
     }
 }
