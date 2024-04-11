@@ -1,19 +1,24 @@
 using System;
 using System.Collections.Generic;
 using Photon.Pun;
+using UnityEngine;
 
 namespace SwordNShield.Combat.States
 {
     public class StateScheduler : MonoBehaviourPunCallbacks
     {
+        [SerializeField] private List<GameObject> stateObjects = new();
         private Dictionary<StateType, IState> stateMapping = new Dictionary<StateType, IState>();
         
         private void Awake()
         {
-            IState[] states = GetComponents<IState>();
-            foreach (var state in states)
+            foreach (var stateObject in stateObjects)
             {
-                stateMapping.Add(state.Type, state);
+                IState state = stateObject.GetComponent<IState>();
+                if (state != null)
+                {
+                    stateMapping.Add(state.Type, state);    
+                }
             }
         }
         public void StartState(StateType type, float rate, float time)
