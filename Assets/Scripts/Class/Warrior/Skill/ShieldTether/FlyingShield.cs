@@ -11,7 +11,13 @@ namespace SwordNShield.Class.Warrior
         public PhotonView owner;
         private float damage;
         private bool isMine;
+        private float stunTime;
 
+        public float StunTime
+        {
+            set => stunTime = value;
+        }
+        
         public void Play(PhotonView attacker, float distance, float duration, float damage)
         {
             owner = attacker;
@@ -46,7 +52,7 @@ namespace SwordNShield.Class.Warrior
             Health health = other.GetComponent<Health>();
             StateScheduler stateScheduler = other.GetComponentInChildren<StateScheduler>();
             if (health != null) health.GetDamage(owner.gameObject, damage);
-            if(stateScheduler != null) stateScheduler.StartState(StateType.Stun, 0, 3f);
+            if(stateScheduler != null) stateScheduler.StartState(StateType.Stun, 0, stunTime);
         }
     }
 }

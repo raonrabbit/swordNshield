@@ -69,7 +69,7 @@ namespace SwordNShield.Class.Warrior
             var health = hit.GetComponent<Health>();
             if (health != null)
             {
-                health.GetDamage(gameObject, damagePerTime);
+                health.GetDamage(Owner.gameObject, damagePerTime);
             }
         }
     }
