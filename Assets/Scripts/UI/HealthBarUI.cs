@@ -1,3 +1,4 @@
+using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,30 +9,34 @@ namespace SwordNShield.UI
 {
     public class HealthBarUI : MonoBehaviourPunCallbacks
     {
+        [SerializeField] private GameObject Owner;
         [SerializeField] private Slider hpBar;
-        [SerializeField] private Text nickName;
-        [SerializeField] private Mover mover;
         [SerializeField] private Vector3 offset;
         [SerializeField] private Health health;
-
-        private
-
-            void Awake()
+        private Mover mover;
+        private bool isMine;
+        void Awake()
         {
+            PhotonView pv = Owner.GetComponent<PhotonView>();
+            if (pv != null) isMine = pv.IsMine;
             Image fillImage = hpBar.fillRect.GetComponent<Image>();
-            fillImage.color = photonView.IsMine ? Color.green : Color.red;
+            fillImage.color = isMine ? Color.green : Color.red;
             hpBar.maxValue = health.MaxHP;
+            mover = Owner.GetComponent<Mover>();
+            if (mover != null) StartCoroutine(FollowOwner());
         }
 
-        void Update()
+        IEnumerator FollowOwner()
         {
-            hpBar.maxValue = health.MaxHP;
-            hpBar.value = health.HP;
-            hpBar.transform.rotation = Quaternion.identity;
-            hpBar.transform.position = mover.transform.position + offset;
-            nickName.transform.rotation = Quaternion.identity;
-            nickName.transform.position = mover.transform.position + offset - new Vector3(0, 0.3f, 0);
-            if (photonView.IsMine) BgHealthBarUI.Instance.SetHPBar(health.MaxHP, health.HP);
+            while (true)
+            {
+                hpBar.maxValue = health.MaxHP;
+                hpBar.value = health.HP;
+                hpBar.transform.rotation = Quaternion.identity;
+                hpBar.transform.position = mover.transform.position + offset;
+                if (photonView.IsMine) BgHealthBarUI.Instance.SetHPBar(health.MaxHP, health.HP);
+                yield return null;
+            }
         }
     }
 }
