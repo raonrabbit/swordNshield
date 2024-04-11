@@ -1,65 +1,44 @@
-using System;
 using UnityEngine;
 using System.Collections;
 using Photon.Pun;
 using SwordNShield.Combat.Actions;
-using SwordNShield.Controller;
 
 namespace SwordNShield.Combat.Skills
 {
-    public class Dash : MonoBehaviour, ISkill
+    public class Dash : Skill
     {
-        public PlayerController Owner { get; set; }
-        
-        public event EventHandler PlaySkill;
-        [SerializeField] private Sprite skillImage;
-        [SerializeField] private GameObject indicator;
-        [SerializeField] private KeyCode keyCode = KeyCode.F;
-        [SerializeField] private float coolTime = 3f;
-        [SerializeField] private float actionTime = 0.5f;
+        [Header("Unique Settings")]
         [SerializeField] private float dashSpeed = 10f;
 
-        private bool canExecute = true;
-        private bool isDashing;
-        private Vector2 dashDirection;
-        private Rigidbody2D rigidBody2D;
-        private Mover mover;
-        private void Awake()
+        [SerializeField] private Rigidbody2D rigidBody2D;
+        [SerializeField] private Mover mover;
+
+        void Awake()
         {
-            rigidBody2D = GetComponent<Rigidbody2D>();
-            mover = GetComponent<Mover>();
+            canExecute = true;
         }
-
-        public KeyCode GetKeyCode
-        {
-            get => keyCode;
-            set => keyCode = value;
-        }
-
-        public Sprite SkillSprite => skillImage;
-        public GameObject Indicator => indicator;
-        public bool CanExecute => canExecute;
-        public bool IsPlaying => isDashing;
-        public float CoolTime => coolTime;
-        public float ActionTime => actionTime;
-
         //Dash 실행
-        public void Play(Vector2? _)
+        public override void Play(Vector2? position)
         {
             if (!canExecute) return;
-            PlaySkill!.Invoke(this, EventArgs.Empty);
-            dashDirection = (Owner.GetMouseRay() - (Vector2)transform.position).normalized;
-            StartCoroutine(ExecuteDash(dashDirection));
-            Owner.photonView.RPC("ExecuteDash", RpcTarget.All, dashDirection);
+            if (photonView.IsMine) InvokeEvent();
+            Vector2 dashDirection = ((Vector2)position - (Vector2)Owner.transform.position).normalized;
+            StartCoroutine(ExecuteCoroutine(dashDirection));
+            //photonView.RPC("ExecuteDash", RpcTarget.All, dashDirection);
         }
         
         [PunRPC]
-        public IEnumerator ExecuteDash(Vector2 dashDirection)
+        public void ExecuteDash(Vector2 dashDirection)
+        {
+            StartCoroutine(ExecuteCoroutine(dashDirection));
+        }
+        
+        public IEnumerator ExecuteCoroutine(Vector2 dashDirection)
         {
             mover.CanMove = false;
             float startTime = Time.time;
             canExecute = false;
-            isDashing = true;
+            isPlaying = true;
             while(Time.time - startTime < actionTime){
                 Owner.GetActionScheduler.CancelCurrentAction();
                 rigidBody2D.velocity = dashDirection * dashSpeed;
@@ -67,7 +46,7 @@ namespace SwordNShield.Combat.Skills
             }
             rigidBody2D.velocity = Vector2.zero;
             mover.CanMove = true;
-            isDashing = false;
+            isPlaying = false;
             yield return new WaitForSeconds(coolTime);
             canExecute = true;
         }

@@ -1,90 +1,65 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
-using SwordNShield.Controller;
 using SwordNShield.Combat.Actions;
 using SwordNShield.Combat.Attributes;
 using SwordNShield.Combat.Skills;
 
 namespace SwordNShield.Class.Warrior
 {
-    public class ShieldAttack : MonoBehaviourPunCallbacks, ISkill
+    public class ShieldAttack : Skill
     {
-        public PlayerController Owner { get; set; }
-        public event EventHandler PlaySkill;
+        [Header("Unique Settings")]
         [SerializeField] private GameObject ShieldEffect;
         [SerializeField] private GameObject ShieldFire;
-        [SerializeField] private AnimationClip animationClip;
-        [SerializeField] private GameObject indicator;
-        [SerializeField] private Sprite skillImage;
-        [SerializeField] private KeyCode keyCode;
-        [SerializeField] private float coolTime;
-        [SerializeField] private float actionTime;
         [SerializeField] private float damage;
         [SerializeField] private float distance;
         [SerializeField] private float duration;
-
-        private AnimationController animationController;
-        private Rotater rotater;
-        private Health health;
-        private Attacker attacker;
-        private bool canExecute = true;
-        private bool isPlaying;
+        [SerializeField] private Health health;
+        [SerializeField] private Rotater rotater;
+        [SerializeField] private Attacker attacker;
+        private Rigidbody2D rigidbody;
 
         void Awake()
         {
-            animationController = GetComponent<AnimationController>();
-            health = GetComponent<Health>();
-            attacker = GetComponent<Attacker>();
-            rotater = GetComponent<Rotater>();
+            canExecute = true;
             health.OnDamageReceived += DefendForward;
             SpriteRenderer indicatorSprite = indicator.GetComponent<SpriteRenderer>();
             indicatorSprite.size = new Vector2(indicatorSprite.size.x, distance);
         }
-
-        public KeyCode GetKeyCode
-        {
-            get => keyCode;
-            set => keyCode = value;
-        }
-
-        public Sprite SkillSprite => skillImage;
-        public GameObject Indicator => indicator;
-        public bool CanExecute => canExecute;
-        public bool IsPlaying => isPlaying;
-        public float CoolTime => coolTime;
-        public float ActionTime => actionTime;
-
-        public void Play(Vector2? position)
+        
+        public override void Play(Vector2? position)
         {
             if (!canExecute) return;
-            PlaySkill!.Invoke(this, EventArgs.Empty);
+            if (photonView.IsMine) InvokeEvent();
             Vector2 direction = (Vector2)position! - (Vector2)transform.position;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-            StartCoroutine(ExecuteShieldAttack(angle));
-            Owner.photonView.RPC("ExecuteShieldAttack", RpcTarget.All, angle);
+            StartCoroutine(ExecuteCoroutine(angle));
+            //photonView.RPC("ExecuteShieldAttack", RpcTarget.All, angle);
         }
 
         [PunRPC]
-        public IEnumerator ExecuteShieldAttack(float angle)
+        public void ExecuteShieldAttack(float angle)
+        {
+            StartCoroutine(ExecuteCoroutine(angle));
+        }
+        public IEnumerator ExecuteCoroutine(float angle)
         {
             animationController.StartAnimation(animationClip);
             rotater.CanRotate = false;
-            attacker.CanAttack = false;
             canExecute = false;
             isPlaying = true;
             health.CanGetDamage = false;
             ShieldEffect.SetActive(true);
-            transform.rotation = Quaternion.Euler(0f, 0f, angle);
-            GameObject instance = Instantiate(ShieldFire, transform.position, transform.rotation);
+            Owner.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            GameObject instance = Instantiate(ShieldFire, Owner.transform.position, Owner.transform.rotation);
             FlyingShield flyingShield = instance.GetComponent<FlyingShield>();
-            flyingShield.Play(gameObject, distance, duration, damage);
+            flyingShield.Play(photonView, distance, duration, damage);
             yield return new WaitForSeconds(actionTime);
             isPlaying = false;
             health.CanGetDamage = true;
             rotater.CanRotate = true;
-            attacker.CanAttack = true;
             ShieldEffect.SetActive(false);
             yield return new WaitForSeconds(coolTime);
             canExecute = true;

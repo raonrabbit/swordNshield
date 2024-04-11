@@ -1,66 +1,43 @@
-using System;
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 using SwordNShield.Combat.Actions;
 using SwordNShield.Combat.Attributes;
 using SwordNShield.Combat.Skills;
-using SwordNShield.Controller;
 
 namespace SwordNShield.Class.Warrior
 {
- public class SwirlAttack : MonoBehaviourPunCallbacks, ISkill
+ public class SwirlAttack : Skill
 {
-    public PlayerController Owner { get; set; }
-    public event EventHandler PlaySkill;
-    [SerializeField] private AnimationClip animationClip;
-    [SerializeField] private Sprite skillImage;
-    [SerializeField] private KeyCode keyCode;
-    [SerializeField] private float coolTime;
-    [SerializeField] private float actionTime;
+    [Header("Unique Settings")]
     [SerializeField] private float timeBetweenDamages;
     [SerializeField] private float damagePerTime;
     [SerializeField] private float damageRange;
     [SerializeField] private GameObject swordTrail;
-    
-    private AnimationController animationController;
-    private Rotater rotater;
-    private Attacker attacker;
-    private bool canExecute;
-    private bool isPlaying;
+    [SerializeField] private Rotater rotater;
+    [SerializeField] private Attacker attacker;
 
     void Awake()
     { 
-        animationController = GetComponent<AnimationController>();
-        rotater = GetComponent<Rotater>();
-        attacker = GetComponent<Attacker>();
-        if (swordTrail != null) swordTrail.SetActive(false);
         canExecute = true;
-    }
-
-    public KeyCode GetKeyCode
-    {
-        get => keyCode;
-        set => keyCode = value;
+        if (swordTrail != null) swordTrail.SetActive(false);
     }
     
-    public Sprite SkillSprite => skillImage;
-    public GameObject Indicator => null;
-    public bool CanExecute => canExecute;
-    public bool IsPlaying => isPlaying;
-    public float CoolTime => coolTime;
-    public float ActionTime => actionTime;
     
-    public void Play(Vector2? _)
+    public override void Play()
     {
         if (!canExecute) return;
-        PlaySkill!.Invoke(this, EventArgs.Empty);
-        StartCoroutine(ExecuteSwirlAttack());
-        Owner.photonView.RPC("ExecuteSwirlAttack", RpcTarget.All);
+        if (photonView.IsMine) InvokeEvent();
+        StartCoroutine(ExecuteCoroutine());
+        //photonView.RPC("ExecuteSwirlAttack", RpcTarget.All);
     }
 
-    [PunRPC]
-    public IEnumerator ExecuteSwirlAttack()
+    //[PunRPC]
+    public void ExecuteSwirlAttack()
+    {
+        StartCoroutine(ExecuteCoroutine());
+    }
+    private IEnumerator ExecuteCoroutine()
     {
         rotater.CanRotate = false;
         attacker.CanAttack = false;
@@ -88,7 +65,7 @@ namespace SwordNShield.Class.Warrior
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, damageRange);
         foreach (var hit in hits)
         {
-            if (hit.gameObject == gameObject) continue;
+            if (hit.gameObject == Owner.gameObject) continue;
             var health = hit.GetComponent<Health>();
             if (health != null)
             {
