@@ -36,11 +36,11 @@ public class ShieldTether : Skill
         animationController.StartAnimation(animationClip);
         canExecute = false;
         isPlaying = true;
+        yield return new WaitForSeconds(actionTime);
         Owner.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         GameObject instance = Instantiate(ShieldFire, Owner.transform.position + transform.up * 0.5f, Owner.transform.rotation);
         FlyingShield flyingShield = instance.GetComponent<FlyingShield>();
         flyingShield.owner = Owner.photonView;
-        yield return new WaitForSeconds(actionTime);
         flyingShield.StunTime = stunTime;
         flyingShield.Play(photonView, distance - 0.5f, duration, damage);
         isPlaying = false;
