@@ -43,7 +43,7 @@ namespace SwordNShield.Combat.Skills
             if (skill.SkillType == SkillType.Immediate)
             { 
                 indicatorManager.DeActivateIndicator();
-                PlaySkill(skill, null);
+                PlaySkill(skill, new Target());
                 yield break;
             }
 
@@ -54,7 +54,13 @@ namespace SwordNShield.Combat.Skills
                 
                 if (skill.IndicatorType == IndicatorType.None)
                 {
-                    PlaySkill(skill, targetPosition);
+                    targetPosition -= (Vector2)transform.position;
+                    targetPosition = targetPosition.normalized;
+                    Target target = new Target
+                    {
+                        VectorTarget = targetPosition
+                    };
+                    PlaySkill(skill, target);
                     yield break;
                 }
                 
@@ -65,7 +71,16 @@ namespace SwordNShield.Combat.Skills
                     if (Input.GetMouseButton(1)) break;
                     if (Input.GetKeyUp(skill.GetKeyCode))
                     {
-                        PlaySkill(skill, targetPosition);
+                        if (skill.IndicatorType == IndicatorType.Arrow)
+                        {
+                            targetPosition -= (Vector2)transform.position;
+                            targetPosition = targetPosition.normalized;
+                        }
+                        Target target = new Target
+                        {
+                            VectorTarget = targetPosition
+                        };
+                        PlaySkill(skill, target);
                         break;
                     }
                     yield return null;
@@ -80,18 +95,19 @@ namespace SwordNShield.Combat.Skills
             }
         }
         
-        public void PlaySkill(Skill skill, Vector2? position)
+        public void PlaySkill(Skill skill, Target? target)
         {
-            photonView.RPC("PlaySkill_RPC", RpcTarget.All, skill.gameObject.name, position);
+            string targetJson = JsonUtility.ToJson(target);
+            photonView.RPC("PlaySkill_RPC", RpcTarget.All, skill.gameObject.name, targetJson);
         }
         
         //PunRPC를 오버로딩할 확률이 큼, 아니면 Vector2, int 등 여러 매개변수 처리하기 쉽지 않을듯
         [PunRPC]
-        public void PlaySkill_RPC(string skillName, Vector2? position)
+        public void PlaySkill_RPC(string skillName, string targetJson)
         {
+            Target target = JsonUtility.FromJson<Target>(targetJson);
             Skill skill = skills[skillName];
-            if (position == null) skill.Play();
-            else skill.Play(position);
+            skill.Play(target);
         }
     }
 }

@@ -42,10 +42,13 @@ namespace SwordNShield.Combat.Skills
         public float ActionTime => actionTime;
         public bool CanUseDuringPlaying => canUseDuringPlaying;
 
+        public abstract void Play(Target target);
+        /*
         public virtual void Play() { }
         public virtual void Play(Vector2? _) { }
 
         public virtual void Play(GameObject _) { }
+        */
 
         protected void InvokeEvent()
         {

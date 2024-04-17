@@ -1,5 +1,6 @@
 using System.Collections;
 using Photon.Pun;
+using SwordNShield.Combat;
 using UnityEngine;
 using SwordNShield.Combat.Actions;
 using SwordNShield.Combat.Attributes;
@@ -22,11 +23,12 @@ namespace SwordNShield.Class.Warrior
             health.OnDamageReceived += DefendForward;
         }
         
-        public override void Play(Vector2? position)
+        public override void Play(Target target)
         {
+            Vector2 direction = target.VectorTarget;
             if (!canExecute) return;
             if (photonView.IsMine) InvokeEvent();
-            Vector2 direction = (Vector2)position! - (Vector2)transform.position;
+            //Vector2 direction = (Vector2)position! - (Vector2)transform.position;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
             StartCoroutine(ExecuteCoroutine(angle));
         }
@@ -39,8 +41,13 @@ namespace SwordNShield.Class.Warrior
             isPlaying = true;
             health.CanGetDamage = false;
             ShieldEffect.SetActive(true);
-            Owner.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-            yield return new WaitForSeconds(actionTime);
+            float startTime = Time.time;
+            while (Time.time - startTime <= actionTime)
+            {
+                Owner.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+                yield return null;
+            }
+            //yield return new WaitForSeconds(actionTime);
             isPlaying = false;
             health.CanGetDamage = true;
             rotater.CanRotate = true;

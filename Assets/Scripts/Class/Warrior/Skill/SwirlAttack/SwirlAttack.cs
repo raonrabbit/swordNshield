@@ -1,5 +1,6 @@
 using System.Collections;
 using Photon.Pun;
+using SwordNShield.Combat;
 using UnityEngine;
 using SwordNShield.Combat.Actions;
 using SwordNShield.Combat.Attributes;
@@ -24,7 +25,7 @@ namespace SwordNShield.Class.Warrior
     }
     
     
-    public override void Play()
+    public override void Play(Target target)
     {
         if (!canExecute) return;
         if (photonView.IsMine) InvokeEvent();

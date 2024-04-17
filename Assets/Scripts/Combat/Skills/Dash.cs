@@ -18,11 +18,12 @@ namespace SwordNShield.Combat.Skills
             canExecute = true;
         }
         //Dash 실행
-        public override void Play(Vector2? position)
+        public override void Play(Target target)
         {
+            Vector2 position = target.VectorTarget;
             if (!canExecute) return;
             if (photonView.IsMine) InvokeEvent();
-            Vector2 dashDirection = ((Vector2)position - (Vector2)Owner.transform.position).normalized;
+            Vector2 dashDirection = (position - (Vector2)Owner.transform.position).normalized;
             StartCoroutine(ExecuteCoroutine(dashDirection));
             //photonView.RPC("ExecuteDash", RpcTarget.All, dashDirection);
         }

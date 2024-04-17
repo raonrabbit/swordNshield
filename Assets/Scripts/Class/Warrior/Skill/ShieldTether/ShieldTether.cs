@@ -1,5 +1,6 @@
 using System.Collections;
 using SwordNShield.Class.Warrior;
+using SwordNShield.Combat;
 using SwordNShield.Combat.Skills;
 using UnityEngine;
 
@@ -19,11 +20,12 @@ public class ShieldTether : Skill
         indicatorSprite.size = new Vector2(indicatorSprite.size.x, distance);
     }
     
-    public override void Play(Vector2? position)
+    public override void Play(Target target)
     {
+        Vector2 direction = target.VectorTarget;
         if (!canExecute) return;
         if (photonView.IsMine) InvokeEvent();
-        Vector2 direction = (Vector2)position! - (Vector2)transform.position;
+        //Vector2 direction = position - (Vector2)transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
         StartCoroutine(ExecuteCoroutine(angle));
         //photonView.RPC("ExecuteShieldAttack", RpcTarget.All, angle);
