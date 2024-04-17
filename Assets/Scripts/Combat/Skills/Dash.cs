@@ -20,10 +20,10 @@ namespace SwordNShield.Combat.Skills
         //Dash 실행
         public override void Play(Target target)
         {
-            Vector2 position = target.VectorTarget;
+            Vector2 dashDirection = target.VectorTarget;
             if (!canExecute) return;
             if (photonView.IsMine) InvokeEvent();
-            Vector2 dashDirection = (position - (Vector2)Owner.transform.position).normalized;
+            //Vector2 dashDirection = (position - (Vector2)Owner.transform.position).normalized;
             StartCoroutine(ExecuteCoroutine(dashDirection));
             //photonView.RPC("ExecuteDash", RpcTarget.All, dashDirection);
         }
