@@ -18,7 +18,8 @@ namespace SwordNShield.Controller
 
         public void StopAnimation()
         {
-            animator.Play("Idle", -1, 0f);
+            //animator.Play("Idle", -1, 0f);
+            animator.CrossFade("Idle", 0.05f);
         }
         
         
