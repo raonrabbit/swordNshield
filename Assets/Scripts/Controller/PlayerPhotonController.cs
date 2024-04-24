@@ -58,7 +58,7 @@ namespace SwordNShield.Controller
             //rigidbody2D.position = Vector3.MoveTowards(rigidbody2D.position, localPosition, Time.fixedDeltaTime * 100);
             if (Vector2.Distance(localPosition, transform.position) > 2f) transform.position = localPosition;
             mover.StartMoveAction(localPosition, stat.MoveSpeed);
-            rotater.StartRotateAction(localRotation, stat.RotateSpeed);
+            //rotater.StartRotateAction(localRotation, stat.RotateSpeed);
         }
     }
 }

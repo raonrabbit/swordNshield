@@ -1,4 +1,5 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 
 namespace SwordNShield.Combat.Actions
@@ -11,12 +12,14 @@ namespace SwordNShield.Combat.Actions
         private Coroutine RotateTowards = null;
         private bool isRotating;
         private bool canRotate;
+        private PhotonView photonView;
         
         void Awake()
         {
             rigidBody2D = GetComponent<Rigidbody2D>();
             actionScheduler = GetComponent<ActionScheduler>();
             animator = GetComponent<Animator>();
+            photonView = GetComponent<PhotonView>();
             isRotating = false;
             canRotate = true;
         }
@@ -31,9 +34,15 @@ namespace SwordNShield.Combat.Actions
             set => canRotate = value;
         }
 
-        public void StartRotateAction(float angle, float speed)
+        public void Rotate(float angle, float speed)
         {
             if (!canRotate) return;
+            photonView.RPC("StartRotateAction", RpcTarget.All, angle, speed);
+        }
+        
+        [PunRPC]
+        public void StartRotateAction(float angle, float speed)
+        {
             if(RotateTowards!=null) StopCoroutine(RotateTowards);
             RotateTowards = StartCoroutine(Look(angle, speed));
         }
