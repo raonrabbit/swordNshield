@@ -24,6 +24,19 @@ namespace SwordNShield.Controller
         private float raycastRadius;
         private float speed;
         private float rotateSpeed;
+        private bool defaultRotation;
+        private bool defaultMoving;
+
+        public bool DefaultRotation
+        {
+            get => defaultRotation;
+            set => defaultRotation = value;
+        }
+        public bool DefaultMoving
+        {
+            get => defaultMoving;
+            set => defaultMoving = value;
+        }
 
         public Mover GetMover => mover;
         private void Awake()
@@ -37,6 +50,8 @@ namespace SwordNShield.Controller
             playerSkills = skillScheduler.GetPlayerSkills();
             speed = stat.MoveSpeed;
             rotateSpeed = stat.RotateSpeed;
+            defaultRotation = true;
+            defaultMoving = true;
         }
         private void Start()
         {
@@ -100,8 +115,8 @@ namespace SwordNShield.Controller
                 CursorManager.Instance.SetCursor(CursorType.Default);
                 Vector2 target = RaycastTarget();
                 float angle = rotater.CalculateAngle(target, transform.position);
-                rotater.StartRotateAction(angle, rotateSpeed);
-                mover.StartMoveAction(target, speed);
+                rotater.Rotate(angle, rotateSpeed);
+                if(defaultMoving) mover.StartMoveAction(target, speed);
             }
         }
 
