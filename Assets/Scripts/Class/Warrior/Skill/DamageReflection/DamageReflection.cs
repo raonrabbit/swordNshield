@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Photon.Pun;
 using SwordNShield.Combat;
@@ -12,7 +13,7 @@ namespace SwordNShield.Class.Warrior
     {
         [Header("Unique Settings")]
         [SerializeField] private GameObject ShieldEffect;
-        [SerializeField] private float damage;
+        [SerializeField] private float reflectDamage;
         [SerializeField] private Health health;
         [SerializeField] private Rotater rotater;
         private Rigidbody2D rigidbody;
@@ -69,9 +70,15 @@ namespace SwordNShield.Class.Warrior
             }
             else
             {
+                photonView.RPC("PunGetDamage", RpcTarget.All, (float)Math.Truncate(damage / 3));
                 Health attackerHealth = attacker.GetComponent<Health>();
                 if (attackerHealth == null) return;
-                attackerHealth.GetDamage(gameObject, damage);
+                attackerHealth.GetDamage(gameObject, reflectDamage);
+                
+                if (health.IsDead())
+                {
+                    health.AwardExperience(attacker);
+                }
             }
         }
 
