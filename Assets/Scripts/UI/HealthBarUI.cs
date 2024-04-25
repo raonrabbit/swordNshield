@@ -22,6 +22,7 @@ namespace SwordNShield.UI
             Image fillImage = hpBar.fillRect.GetComponent<Image>();
             fillImage.color = isMine ? Color.green : Color.red;
             hpBar.maxValue = health.MaxHP;
+            hpBar.value = health.MaxHP;
             mover = Owner.GetComponent<Mover>();
             if (mover != null) StartCoroutine(FollowOwner());
         }
