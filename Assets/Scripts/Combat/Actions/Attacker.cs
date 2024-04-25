@@ -51,7 +51,7 @@ namespace SwordNShield.Combat.Actions
                 if (Vector2.Distance(transform.position, target.transform.position) <= stat.AttackRange)
                 {
                     float angle = rotater.CalculateAngle(target.transform.position, transform.position);
-                    rotater.StartRotateAction(angle, stat.RotateSpeed);
+                    rotater.Rotate(angle, stat.RotateSpeed);
                     if (canAttack)
                     {
                         photonView.RPC("PlayTriggerAnimation", RpcTarget.All, "attack");
@@ -65,7 +65,7 @@ namespace SwordNShield.Combat.Actions
                     if (canMove)
                     {
                         float angle = rotater.CalculateAngle(target.transform.position, transform.position);
-                        rotater.StartRotateAction(angle, stat.RotateSpeed);
+                        rotater.Rotate(angle, stat.RotateSpeed);
                         Vector2 direction = ((Vector2)target.transform.position - rigidBody2D.position).normalized;
                         rigidBody2D.velocity = direction * stat.MoveSpeed;
                     }
