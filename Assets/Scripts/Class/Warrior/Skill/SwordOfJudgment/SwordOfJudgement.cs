@@ -1,6 +1,7 @@
 using System.Collections;
 using SwordNShield.Combat;
 using SwordNShield.Combat.Actions;
+using SwordNShield.Combat.Attributes;
 using SwordNShield.Combat.Skills;
 using SwordNShield.Controller;
 using UnityEngine;
@@ -12,13 +13,20 @@ public class SwordOfJudgement : Skill
     [SerializeField] private Attacker attacker;
     [SerializeField] private Mover mover;
     [SerializeField] private Rotater rotater;
-    [SerializeField] private GameObject Lazer;
+    [SerializeField] private Laser laser;
     [SerializeField] private float damage;
+    [SerializeField] private float width;
     [SerializeField] private float distance;
     [SerializeField] private float rotateSpeed;
 
     void Awake()
     {
+        laser.SetLaserSize(width, distance);
+        if (indicator != null)
+        {
+            SpriteRenderer indicatorSprite = indicator.GetComponent<SpriteRenderer>();
+            indicatorSprite.size = new Vector2(width, distance);
+        }
         canExecute = true;
     }
     
@@ -34,7 +42,7 @@ public class SwordOfJudgement : Skill
     public IEnumerator ExecuteCoroutine(float angle)
     {
         if (photonView.IsMine) playerController.DefaultRotation = false;
-        
+           
         mover.Cancel();
         mover.CanMove = false;
         attacker.Cancel();
@@ -44,25 +52,53 @@ public class SwordOfJudgement : Skill
         animationController.StartAnimation(animationClip);
         
         float duration = actionTime;
+        float nextDamageTime = 0f;
+        
         while (duration > 0)
         {
             mover.CanMove = false;
             
+            laser.gameObject.SetActive(true);
             if (photonView.IsMine)
             {
-                Lazer.SetActive(true);
                 Vector2 mousePosition = playerController.GetMouseRay();
                 //Debug.Log(mousePosition);
                 rotater.Rotate(rotater.CalculateAngle(mousePosition, transform.position), rotateSpeed);
+
+                if (Time.time >= nextDamageTime)
+                {
+                    GiveDamage();
+                    nextDamageTime = Time.time + 0.1f;
+                }
             }
             duration -= Time.deltaTime;
             yield return null;
         }
-        Lazer.SetActive(false);
+        laser.gameObject.SetActive(false);
         animationController.StopAnimation();
         mover.CanMove = true;
         attacker.CanAttack = true;
         
         yield return null;
+    }
+
+    private void GiveDamage()
+    {
+        Vector2 box = new Vector2(width, width);
+
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position, box, 0, transform.up, distance);
+
+        foreach (var hit in hits)
+        {
+            if (hit.collider != null)
+            {
+                if (hit.collider.gameObject == Owner.gameObject) continue;
+                Health health = hit.collider.GetComponent<Health>();
+                if (health != null)
+                {
+                    health.GetDamage(Owner.gameObject, damage);
+                }
+            }
+        }
     }
 }
