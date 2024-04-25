@@ -7,6 +7,7 @@ namespace SwordNShield.Combat.Actions
 {
     public class Attacker : MonoBehaviourPunCallbacks, IAction
     {
+        private AttackType attackType;
         private bool canAttack;
         private bool canMove;
         private Rigidbody2D rigidBody2D;
@@ -26,7 +27,9 @@ namespace SwordNShield.Combat.Actions
             rigidBody2D = GetComponent<Rigidbody2D>();
             rotater = GetComponent<Rotater>();
             stat = GetComponent<Stat>();
+            
             canMove = stat.MoveSpeed != 0;
+            attackType = stat.AttackType;
             canAttack = true;
             actionScheduler = GetComponent<ActionScheduler>();
         }
@@ -56,7 +59,18 @@ namespace SwordNShield.Combat.Actions
                     {
                         photonView.RPC("PlayTriggerAnimation", RpcTarget.All, "attack");
                         if (target == null || target.IsDead()) Cancel();
-                        target.GetDamage(gameObject, stat.AttackDamage);
+
+                        switch (attackType)
+                        {
+                            case AttackType.Melee:
+                                target.GetDamage(gameObject, stat.AttackDamage);
+                                break;
+                            
+                            case AttackType.Range:
+                                ThrowBullet(target);
+                                break;
+                        }
+                        
                         StartCoroutine(AttackDelay());
                     }
                 }
@@ -80,6 +94,23 @@ namespace SwordNShield.Combat.Actions
             canAttack = false;
             yield return new WaitForSeconds(stat.AttackCoolTime);
             canAttack = true;
+        }
+
+        private void ThrowBullet(Health target)
+        {
+            photonView.RPC("ThrowBulletRPC", RpcTarget.All, target.photonView.ViewID);
+        }
+        [PunRPC]
+        private void ThrowBulletRPC(int targetViewID)
+        {
+            PhotonView targetView = PhotonView.Find(targetViewID);
+            GameObject instance = Instantiate(stat.Bullet, transform.position + stat.BulletPosition, transform.rotation);
+            Health health = targetView.GetComponent<Health>();
+            Bullet bullet = instance.GetComponent<Bullet>();
+            bullet.Owner = gameObject;
+            bullet.Damage = stat.AttackDamage;
+            bullet.Speed = stat.BulletSpeed;
+            bullet.FollowTarget(health);
         }
     }
 }
