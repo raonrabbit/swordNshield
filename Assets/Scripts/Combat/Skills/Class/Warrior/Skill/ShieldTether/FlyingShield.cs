@@ -48,6 +48,7 @@ namespace SwordNShield.Class.Warrior
         void OnTriggerEnter2D(Collider2D other)
         {
             if (isMine) return;
+            //여기서 자꾸 무언가의 오류가 발생함
             if (other.transform == owner.transform) return;
             Health health = other.GetComponent<Health>();
             StateScheduler stateScheduler = other.GetComponentInChildren<StateScheduler>();
