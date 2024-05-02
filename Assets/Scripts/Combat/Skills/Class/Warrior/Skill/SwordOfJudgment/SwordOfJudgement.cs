@@ -42,7 +42,8 @@ public class SwordOfJudgement : Skill
     public IEnumerator ExecuteCoroutine(float angle)
     {
         if (photonView.IsMine) playerController.DefaultRotation = false;
-           
+
+        canExecute = false;
         mover.Cancel();
         mover.CanMove = false;
         attacker.Cancel();
@@ -78,6 +79,9 @@ public class SwordOfJudgement : Skill
         animationController.StopAnimation();
         mover.CanMove = true;
         attacker.CanAttack = true;
+        
+        yield return new WaitForSeconds(CoolTime);
+        canExecute = true;
         
         yield return null;
     }
