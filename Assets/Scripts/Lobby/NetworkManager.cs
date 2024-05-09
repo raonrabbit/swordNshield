@@ -193,7 +193,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Join");
         ExitGames.Client.Photon.Hashtable customProps = PhotonNetwork.CurrentRoom.CustomProperties;
-
         if (PhotonNetwork.LocalPlayer.Equals(PhotonNetwork.MasterClient))
         {
             ReadyButton.SetActive(false);
@@ -221,8 +220,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 bool isMasterClient = player.Equals(PhotonNetwork.MasterClient);
                 CharacterSlots[playerNumber - 1].SetMasterClient(isMasterClient);
                 TMP_Text nameText = CharacterSlots[playerNumber - 1].Name;
-                if (nameText != null) nameText.text = player.NickName;
-                
+                nameText.text = player.NickName;
                 Image classImage = CharacterSlots[playerNumber - 1].SlotImage;
                 if (classImage != null) UpdateCharacterImage(classImage, (ClassType)player.CustomProperties["Class"]);
             }
@@ -252,6 +250,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < 4; i++)
         {
             CharacterSlots[i].Name.text = "";
+            CharacterSlots[i].Name.color = Color.black;
             CharacterSlots[i].SlotImage.sprite = DefaultButtonImage;
         }
     }
@@ -280,6 +279,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         TMP_Text nameText = CharacterSlots[playerNumber - 1].Name;
         if (nameText != null) nameText.text = "";
 
+        CharacterSlots[playerNumber - 1].SetMasterClient(false);
         Image classImage = CharacterSlots[playerNumber - 1].SlotImage;
         classImage.sprite = DefaultButtonImage;
     }
@@ -287,11 +287,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnPlayerPropertiesUpdate(Player player, ExitGames.Client.Photon.Hashtable changedProps)
     {
         if (!changedProps.ContainsKey("Number")) return;
+        
         int playerNumber = (int)changedProps["Number"];
+        CharacterSlots[playerNumber - 1].SetMasterClient(player.Equals(PhotonNetwork.MasterClient));
         TMP_Text nameText = CharacterSlots[playerNumber - 1].Name;
 
         if (nameText != null) nameText.text = player.NickName;
 
+        if (player.Equals(PhotonNetwork.LocalPlayer))
+        {
+            nameText.color = Color.green;
+        }
         Image classImage = CharacterSlots[playerNumber - 1].SlotImage;
         if (changedProps.ContainsKey("Class") && classImage != null)
         {
@@ -323,12 +329,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         string roomName = new string(Enumerable.Repeat(chars, 4).Select(s => s[random.Next(s.Length)]).ToArray());
 
         return roomName;
-    }
-
-    public void OnClickLeaveTeamRoom()
-    {
-        PhotonNetwork.LeaveRoom();
-        TeamReadyPanel.SetActive(false);
     }
 
     public void OnClickLeaveSoloRoom()
