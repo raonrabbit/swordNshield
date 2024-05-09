@@ -9,7 +9,7 @@ namespace SwordNShield.UI
     public class KillScoreUI : MonoBehaviourPunCallbacks
     {
         public GameObject killScorePrefab;
-        private Dictionary<string, int> scores;
+        private Dictionary<Player, int> scores;
         public RankingUI[] rankingUis;
 
         public override void OnJoinedRoom() => UpdateKillScore();
@@ -21,18 +21,18 @@ namespace SwordNShield.UI
 
         private void UpdateKillScore()
         {
-            scores = new Dictionary<string, int>();
+            scores = new ();
             int i = 0;
             foreach (var player in PhotonNetwork.PlayerList)
             {
-                if (player.NickName == "") continue;
-                scores.Add(player.NickName, (int)player.CustomProperties["Score"]);
+                if (!player.CustomProperties.ContainsKey("Score")) continue;
+                scores.Add(player, (int)player.CustomProperties["Score"]);
             }
 
             foreach (var d in scores.OrderByDescending(x => x.Value))
             {
                 rankingUis[i].Ranking = (i + 1).ToString();
-                rankingUis[i].Name = d.Key;
+                rankingUis[i].Name = d.Key.NickName;
                 rankingUis[i++].KillCount = d.Value.ToString();
             }
 
